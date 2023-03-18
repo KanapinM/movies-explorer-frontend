@@ -1,0 +1,32 @@
+.profile__edit-button {
+    margin: 31.4vh 0 16px;
+    padding: 0;
+    font-family: 'Inter', Arial, sans-serif;
+    font-style: normal;
+    font-weight: 400;
+    font-size: 13px;
+    line-height: 16px;
+    background-color: #FAFAFA;
+    border: 0;
+    cursor: pointer;
+}
+
+.profile__edit-button:hover {
+    opacity: 0.7;
+}
+
+@media screen and (max-width: 768px) {
+    .profile__edit-button {
+        margin: 20.5vh 0 16px;
+        font-size: 12px;
+        line-height: 15px;
+    }
+}
+
+@media screen and (max-width: 320px) {
+    .profile__edit-button {
+        margin: 48.5vh 0 16px;
+        font-size: 12px;
+        line-height: 15px;
+    }
+}

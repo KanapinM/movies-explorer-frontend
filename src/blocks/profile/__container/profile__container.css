@@ -1,0 +1,26 @@
+.profile__container {
+    padding: 10.5vh 0 10vh;
+    margin: 0 auto;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    width: 410px;
+}
+
+@media screen and (max-width: 410px) {
+    .profile__container {
+        width: auto;
+    }
+}
+
+@media screen and (max-width: 768px) {
+    .profile__container {
+        padding: 23vh 0 26.2vh;
+    }
+}
+
+@media screen and (max-width: 320px) {
+    .profile__container {
+        padding: 8.9vh 0 5.1vh;
+    }
+}

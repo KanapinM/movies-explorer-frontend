@@ -1,0 +1,9 @@
+.aboutMe__container {
+    display: flex;
+}
+
+@media screen and (max-width: 550px) {
+    .aboutMe__container {
+        flex-direction: column-reverse;
+    }
+}

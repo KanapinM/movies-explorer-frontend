@@ -1,0 +1,20 @@
+.aboutProject__info {
+    width: 48.25%;
+}
+
+@media screen and (max-width: 768px) {
+    .aboutProject__info {
+        width: 47.75%;
+    }
+}
+
+@media screen and (max-width: 320px) {
+    .aboutProject__info {
+        width: 88.75%;
+        margin-bottom: 56px;
+    }
+
+    .aboutProject__info:last-child {
+        margin-bottom: 0;
+    }
+}

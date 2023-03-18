@@ -1,0 +1,18 @@
+.aboutProject__container {
+    margin-bottom: 110px;
+    display: flex;
+    justify-content: space-between;
+}
+
+@media screen and (max-width: 768px) {
+    .aboutProject__container {
+        margin-bottom: 93px;
+    }
+}
+
+@media screen and (max-width: 320px) {
+    .aboutProject__container {
+        margin-bottom: 60px;
+        flex-direction: column;
+    }
+}

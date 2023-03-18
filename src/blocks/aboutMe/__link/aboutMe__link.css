@@ -1,0 +1,14 @@
+.aboutMe__link {
+    text-decoration: none;
+    color: black;
+    font-family: 'Inter';
+    font-style: normal;
+    font-weight: 500;
+    font-size: 14px;
+    line-height: 17px;
+    transition: ease-in-out 0.3s;
+}
+
+.aboutMe__link:hover {
+    opacity: 0.6;
+}

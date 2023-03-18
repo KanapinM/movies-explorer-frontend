@@ -1,0 +1,17 @@
+.card__chrono {
+    margin: 25px 0 0;
+    padding-top: 6px;
+    font-weight: 400;
+    font-size: 11px;
+    line-height: 13px;
+    color: #A0A0A0;
+    border: solid #E8E8E8;
+    border-width: 1px 0 0;
+}
+
+@media screen and (max-width: 320px) {
+    .card__chrono {
+        font-size: 10px;
+        line-height: 12px;
+    }
+}

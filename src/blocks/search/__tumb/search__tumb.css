@@ -1,0 +1,8 @@
+.search__tumb {
+    margin: 0;
+    background-image: url('../../../images/search__tumb.svg');
+}
+
+.search__tumb.active {
+    background-image: url('../../../images/search__tumb-active.svg');
+}

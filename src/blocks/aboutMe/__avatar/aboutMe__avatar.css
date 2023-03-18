@@ -1,0 +1,21 @@
+.aboutMe__avatar {
+    margin-left: 23.75%;
+    width: 270px;
+    height: 327px;
+}
+
+@media screen and (max-width: 768px) {
+    .aboutMe__avatar {
+        margin-left: 7.33%;
+        width: 255px;
+        height: 307px;
+    }
+}
+
+@media screen and (max-width: 550px) {
+    .aboutMe__avatar {
+        margin: 0 auto 40px;
+        width: 292px;
+        height: 352px;
+    }
+}

@@ -1,0 +1,16 @@
+.notfound__text {
+    margin: 5px auto 184px;
+    font-family: 'Inter', Arial, sans-serif;
+    font-style: normal;
+    font-weight: 400;
+    font-size: 16px;
+    line-height: 19px;
+}
+
+@media screen and (max-width: 320px) {
+    .notfound__text {
+        margin: 10px auto 284px;
+        font-size: 12px;
+        line-height: 15px;
+    }
+}

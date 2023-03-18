@@ -1,0 +1,25 @@
+.user__input {
+    margin: 0px auto 24px;
+    padding: 0 0 10px 0;
+    color: black;
+    border-width: 0 0 1px 0;
+    border-color: #CCCCCC;
+    background-color: #FAFAFA;
+    min-width: 396px;
+    font-weight: 400;
+    font-size: 14px;
+    line-height: 17px;
+}
+
+.user__input:focus {
+    border-width: 0 0 1px 0;
+    border-color: #3456F3;
+    outline: none;
+}
+
+@media screen and (max-width: 396px) {
+    .user__input {
+        min-width: 260px;
+        margin-bottom: 0px auto 20px;
+    }
+}

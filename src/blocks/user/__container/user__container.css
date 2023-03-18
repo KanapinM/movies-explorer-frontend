@@ -1,0 +1,26 @@
+.user__container {
+    padding: 10vh 0 10vh;
+    margin: 0 auto;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    width: 396px;
+}
+
+@media screen and (max-width: 396px) {
+    .user__container {
+        width: auto;
+    }
+}
+
+@media screen and (max-width: 768px) {
+    .user__container {
+        padding: 22vh 0 22vh;
+    }
+}
+
+@media screen and (max-width: 320px) {
+    .user__container {
+        padding: 7vh 0 3.8vh;
+    }
+}

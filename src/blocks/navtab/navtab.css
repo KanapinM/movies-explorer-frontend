@@ -1,0 +1,16 @@
+.navtab {
+    margin: 151px auto 30px;
+    display: flex;
+}
+
+@media screen and (max-width: 768px) {
+    .navtab {
+        margin: 314px auto 30px;
+    }
+}
+
+@media screen and (max-width: 320px) {
+    .navtab {
+        margin: 212px auto 17px;
+    }
+}

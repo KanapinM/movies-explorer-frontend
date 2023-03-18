@@ -1,0 +1,27 @@
+.portfolio__link {
+    padding-bottom: 9px;
+    margin-bottom: 20px;
+    display: flex;
+    justify-content: space-between;
+    border: solid rgb(230, 230, 230);
+    border-width: 0 0 1px;
+    text-decoration: none;
+    color: black;
+    transition: ease-in-out 0.3s;
+}
+
+.portfolio__link:last-child {
+    padding-bottom: 0;
+    margin-bottom: 0;
+    border: none;
+}
+
+.portfolio__link:hover {
+    opacity: 0.6;
+}
+
+@media screen and (max-width: 540px) {
+    .portfolio__link {
+        padding-bottom: 19px;
+    }
+}

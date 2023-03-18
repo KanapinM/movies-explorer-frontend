@@ -1,0 +1,17 @@
+.card__tittle {
+    margin: 0;
+    font-weight: 500;
+    font-size: 13px;
+    line-height: 16px;
+    color: #000000;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    overflow: hidden;
+}
+
+@media screen and (max-width: 320px) {
+    .card__tittle {
+        font-size: 12px;
+        line-height: 15px;
+    }
+}

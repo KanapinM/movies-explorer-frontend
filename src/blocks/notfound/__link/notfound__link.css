@@ -1,0 +1,23 @@
+.notfound__link {
+    text-decoration: none;
+    color: #3456F3;
+    border: none;
+    background-color: white;
+    transition: ease-in-out 0.3s;
+    font-family: 'Inter', Arial, sans-serif;
+    font-style: normal;
+    font-weight: 400;
+    font-size: 14px;
+    line-height: 17px;
+}
+
+.notfound__link:hover {
+    opacity: 0.6;
+}
+
+@media screen and (max-width: 320px) {
+    .notfound__link {
+        font-size: 12px;
+        line-height: 15px;
+    }
+}

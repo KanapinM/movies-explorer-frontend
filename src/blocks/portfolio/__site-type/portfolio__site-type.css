@@ -1,0 +1,23 @@
+.portfolio__site-type {
+    margin: 0;
+    font-family: 'Inter', Arial, sans-serif;
+    font-style: normal;
+    font-weight: 400;
+    font-size: 30px;
+    line-height: 50px;
+    letter-spacing: -0.04em;
+    align-self: center;
+}
+
+@media screen and (max-width: 768px) {
+    .portfolio__site-type {
+        font-size: 28px;
+    }
+}
+
+@media screen and (max-width: 540px) {
+    .portfolio__site-type {
+        font-size: 18px;
+        line-height: 28px;
+    }
+}
