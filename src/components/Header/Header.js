@@ -7,7 +7,7 @@ import { Switch, Route, Link } from "react-router-dom";
 function Header() {
 
     return (
-        <div className="header">
+        <header className="header">
 
             <Switch>
                 <Route path="/(movies|saved-movies|profile)">
@@ -23,7 +23,7 @@ function Header() {
                     <Navigation />
                 </Route>
 
-                <Route path="/">
+                <Route path="(/)">
                     <Link
                         to="/movies">
                         <img
@@ -46,7 +46,7 @@ function Header() {
 
             </Switch>
 
-        </div>
+        </header>
     );
 }
 

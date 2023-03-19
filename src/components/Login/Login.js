@@ -33,49 +33,51 @@ function Login({ onSubmit, ...props }) {
 
 
     return (
-        <div className="user__container">
-            <Link to="/" className="user__logo">
-                <img
-                    className="user__logo-image"
-                    src={logo}
-                    alt="логтип"
-                />
-            </Link>
-            <h2 className="user__title">
-                Рады видеть!
-            </h2>
-            <form
-                onSubmit={handleSubmit}
-                className="user__form">
-                <h3 className='user__input_type' >Email</h3>
-                <input
-                    onChange={handleChange}
-                    className="user__input"
-                    name="email"
-                    type="email"
-                    required
-                />
-                <h3 className='user__input_type'>Пароль</h3>
-                <input
-                    onChange={handleChange}
-                    className="user__input"
-                    name="password"
-                    type="password"
-                    required
-                />
-                <button
-                    type="submit"
-                    className="user__submit-button user__submit-button_login">
-                    Войти
-                </button>
-                <p className="user__are-registered">
-                    Ещё не зарегистрированы? &nbsp;
-                    <Link to="/signup" className="user__are-registrated_type_link">
-                        Регистрация
-                    </Link>
-                </p>
-            </form>
-        </div>
+        <section className="user">
+            <div className="user__container">
+                <Link to="/" className="user__logo">
+                    <img
+                        className="user__logo-image"
+                        src={logo}
+                        alt="логтип"
+                    />
+                </Link>
+                <h2 className="user__title">
+                    Рады видеть!
+                </h2>
+                <form
+                    onSubmit={handleSubmit}
+                    className="user__form">
+                    <label className="user__input-label" >Email</label>
+                    <input
+                        onChange={handleChange}
+                        className="user__input"
+                        name="email"
+                        type="email"
+                        required
+                    />
+                    <label className="user__input-label">Пароль</label>
+                    <input
+                        onChange={handleChange}
+                        className="user__input"
+                        name="password"
+                        type="password"
+                        required
+                    />
+                    <button
+                        type="submit"
+                        className="user__submit-button user__submit-button_login">
+                        Войти
+                    </button>
+                    <p className="user__registered">
+                        Ещё не зарегистрированы? &nbsp;
+                        <Link to="/signup" className="user__registered-link">
+                            Регистрация
+                        </Link>
+                    </p>
+                </form>
+            </div>
+        </section>
     );
 }
 

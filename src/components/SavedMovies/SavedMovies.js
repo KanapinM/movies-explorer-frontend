@@ -1,8 +1,6 @@
 import React from 'react';
-import Header from '../Header/Header';
 import SearchForm from '../SearchForm/SearchForm';
 // import Card from '../Card/Card';
-import Footer from '../Footer/Footer';
 
 
 function SavedMovies(props) {
@@ -11,7 +9,7 @@ function SavedMovies(props) {
     }
     return (
         <>
-            <Header />
+            {/* <Header /> */}
             <SearchForm />
             <div className="cardsContainer">
                 <div className="card">
@@ -72,7 +70,7 @@ function SavedMovies(props) {
 
 
             </div>
-            <Footer />
+            {/* <Footer /> */}
         </>
     );
 }

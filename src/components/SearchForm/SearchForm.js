@@ -9,6 +9,7 @@ function SearchForm() {
                 className="search__input"
                 name="movie"
                 type="movie"
+                required
             />
             <button className="search__button">
                 <img src={button} alt="лупа" />

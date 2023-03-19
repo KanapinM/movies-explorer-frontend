@@ -20,7 +20,7 @@
     }
 }
 
-@media screen and (max-width: 320px) {
+@media screen and (max-width: 550px) {
     .promo__title {
         margin: 220px 0 0;
         font-size: 29px;

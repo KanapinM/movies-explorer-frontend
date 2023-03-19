@@ -3,9 +3,10 @@
     margin: 50px auto 80px;
     display: block;
     cursor: pointer;
-    background-color: #E8E8E8;
+    background-color: transparent;
     border-color: #E8E8E8;
-    border-radius: 5px;
+    border-style: solid;
+    border-radius: 7px;
     width: 320px;
     height: 36px;
     transition: ease-in-out 0.3s;
@@ -17,18 +18,11 @@
 }
 
 .more-button:hover {
-    opacity: 0.6;
+    opacity: 0.8;
 }
 
 @media screen and (max-width: 430px) {
     .more-button {
         width: 240px;
-    }
-}
-
-@media screen and (max-width: 320px) {
-    .more-button {
-        font-size: 12px;
-        line-height: 15px;
     }
 }

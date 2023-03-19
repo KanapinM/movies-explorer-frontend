@@ -1,5 +1,5 @@
 import React from 'react';
-import { Switch, Route, useHistory } from 'react-router-dom';
+import { Switch, Route, useHistory, useLocation } from 'react-router-dom';
 
 import { CurrentUserContext } from '../contexts/CurrentUserContext';
 
@@ -11,6 +11,8 @@ import Login from '../components/Login/Login';
 import Register from '../components/Register/Register';
 import InfoTooltip from './InfoTooltip/InfoTooltip';
 
+import Header from '../components/Header/Header';
+import Footer from '../components/Footer/Footer';
 import Main from '../components/Main/Main';
 import Movies from '../components/Movies/Movies';
 import SavedMovies from '../components/SavedMovies/SavedMovies';
@@ -43,6 +45,9 @@ function App() {
         .catch((err) => console.log(err))
     }
   }, [loggedIn])
+  const location = useLocation();
+  const hiddenHeader = ['/signup', '/signin', '/notfound'].includes(location.pathname);
+  const hiddenFooter = ['/signup', '/signin', '/profile', '/notfound'].includes(location.pathname);
 
   function handleEditProfileClick() {
     setIsEditProfilePopupOpen(true);
@@ -141,8 +146,8 @@ function App() {
 
   return (
     <CurrentUserContext.Provider value={currentUser}>
-      <div className="page">
-
+      {hiddenHeader ? <></> : <Header />}
+      <main>
         <Switch>
           <Route path="/signup">
             <Register auth={auth} onSubmit={handleRegister} />
@@ -189,22 +194,23 @@ function App() {
           />
 
         </Switch>
+      </main>
+      {hiddenFooter ? <></> : <Footer />}
 
-        <EditProfilePopup
-          isEditProfilePopupOpen={isEditProfilePopupOpen}
-          onClose={closeAllPopups}
-          onUpdateUser={handleUpdateUser}
-        />
-        <ImagePopup
-          card={selectedCard}
-          onClose={closeAllPopups}
-        />
-        <InfoTooltip
-          isSuccessTooltipStatus={isSuccessTooltipStatus}
-          isInfoTooltipOpen={isInfoTooltipOpen}
-          onClose={closeAllPopups}
-        />
-      </div>
+      <EditProfilePopup
+        isEditProfilePopupOpen={isEditProfilePopupOpen}
+        onClose={closeAllPopups}
+        onUpdateUser={handleUpdateUser}
+      />
+      <ImagePopup
+        card={selectedCard}
+        onClose={closeAllPopups}
+      />
+      <InfoTooltip
+        isSuccessTooltipStatus={isSuccessTooltipStatus}
+        isInfoTooltipOpen={isInfoTooltipOpen}
+        onClose={closeAllPopups}
+      />
     </CurrentUserContext.Provider >
 
   );

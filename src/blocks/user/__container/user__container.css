@@ -7,7 +7,7 @@
     width: 396px;
 }
 
-@media screen and (max-width: 396px) {
+@media screen and (max-width: 410px) {
     .user__container {
         width: auto;
     }

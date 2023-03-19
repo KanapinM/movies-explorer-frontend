@@ -1,6 +1,6 @@
 function Techs() {
     return (
-        <div className="techs">
+        <section className="techs">
             <a name="techs" />
             <h3 className="techs__title">
                 Технологии
@@ -20,7 +20,7 @@ function Techs() {
                 <li className="techs__name">Express.js</li>
                 <li className="techs__name">mongoDB</li>
             </ul>
-        </div>
+        </section>
     )
 }
 

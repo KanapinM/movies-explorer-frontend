@@ -8,7 +8,7 @@
     opacity: 0.8;
 }
 
-@media screen and (max-width: 396px) {
+@media screen and (max-width: 410px) {
     .user__logo-image {
         margin: 0 auto 50px;
     }

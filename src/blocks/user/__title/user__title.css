@@ -8,7 +8,7 @@
     line-height: 29px;
 }
 
-@media screen and (max-width: 396px) {
+@media screen and (max-width: 410px) {
     .user__title {
         margin: 0 auto 80px;
     }

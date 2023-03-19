@@ -21,7 +21,7 @@ function Navigation() {
                     <Link
                         to="/movies"
                         className="navigation__link">
-                        Фильм
+                        Фильмы
                     </Link>
                     <Link
                         to="/saved-movies"
@@ -32,10 +32,10 @@ function Navigation() {
                 <div className='navigation__profile'>
                     <Link
                         to="/profile"
-                        className="header__href header__href_profile">
+                        className="navigation__href">
                         Аккаунт
                         <img
-                            className="header__logo-profile"
+                            className="navigation__logo-profile"
                             src={profileLogo}
                             alt="логтип аккаунта"
                         />
@@ -44,42 +44,46 @@ function Navigation() {
                 </div>
             </nav>
 
-            <nav className="navigation__hamburger">
-                <button className="navigation__hamburger-button" onClick={openSideBar}></button>
+            <nav className="navburger">
+                <button className="navburger-button" onClick={openSideBar}></button>
             </nav>
+
             <div
                 isSideBarOpen={isSideBarOpen}
-                className={`navigation__sidebar ${isSideBarOpen ? 'navigation__sidebar_open' : ''}`} >
-                <nav className='navigation__menu'>
+                className={`navigation-sidebar ${isSideBarOpen ? 'navigation-sidebar_open' : ''}`} >
+                <nav className='navigation-sidebar__menu'>
                     <button
                         onClick={onCloseSidebar}
                         type="button"
-                        className="navigation__close-button"
+                        className="navigation-sidebar__close-button"
                     />
-                    <div className='navigation__links'>
+                    <div className='navigation-sidebar__links'>
                         <Link
                             to="/"
-                            className="navigation__link">
+                            className="navigation-sidebar__link">
                             Главная
                         </Link>
                         <Link
                             to="/movies"
-                            className="navigation__link">
-                            Фильм
+                            onClick={onCloseSidebar}
+                            className="navigation-sidebar__link">
+                            Фильмы
                         </Link>
                         <Link
                             to="/saved-movies"
-                            className="navigation__link">
+                            onClick={onCloseSidebar}
+                            className="navigation-sidebar__link">
                             Сохранённые фильмы
                         </Link>
                     </div>
-                    <div className='navigation__profile'>
+                    <div className='navigation-sidebar__profile'>
                         <Link
                             to="/profile"
-                            className="header__href header__href_profile">
+                            onClick={onCloseSidebar}
+                            className="navigation-sidebar__href">
                             Аккаунт
                             <img
-                                className="header__logo-profile"
+                                className="navigation-sidebar__logo-profile"
                                 src={profileLogo}
                                 alt="логтип аккаунта"
                             />

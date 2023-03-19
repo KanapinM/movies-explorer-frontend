@@ -1,15 +1,13 @@
 import React from 'react';
-import Header from '../Header/Header';
 import SearchForm from '../SearchForm/SearchForm';
 import Card from '../Card/Card';
-import Footer from '../Footer/Footer';
 
 
 function Movies(props) {
 
     return (
         <>
-            <Header />
+            {/* <Header /> */}
             <SearchForm />
             <div className="cardsContainer">
                 {props.cards.map(({ ...card }) =>
@@ -24,7 +22,7 @@ function Movies(props) {
                 )}
             </div>
             <button className="more-button">Ещё</button>
-            <Footer />
+            {/* <Footer /> */}
         </>
     );
 }

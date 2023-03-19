@@ -1,27 +1,26 @@
 import React from 'react';
 import { CurrentUserContext } from '../../contexts/CurrentUserContext';
-import Header from '../Header/Header';
+// import Header from '../Header/Header';
 
 function Profile({ ...props }) {
     const userData = React.useContext(CurrentUserContext);
 
     return (
-        <>
-            <Header />
+        <section className='profile'>
+            {/* <Header /> */}
             <div className="profile__container">
                 <h2 className="profile__title">
                     Привет, {userData.name}!
                 </h2>
-                <form
-                    className="user__form">
+                <form className="profile__form">
                     <div>
                         <div className='profile__data'>
-                            <p className='profile__data_type'>Имя</p>
-                            <p className='profile__data_person'>{userData.name}</p>
+                            <p className='profile__data-type'>Имя</p>
+                            <p className='profile__data-person'>{userData.name}</p>
                         </div>
                         <div className='profile__data'>
-                            <p className='profile__data_type'>E-mail</p>
-                            <p className='profile__data_person'>{props.email}</p>
+                            <p className='profile__data-type'>E-mail</p>
+                            <p className='profile__data-person'>{props.email}</p>
                         </div>
                     </div>
                     <button
@@ -38,7 +37,7 @@ function Profile({ ...props }) {
                     </button>
                 </form>
             </div>
-        </>
+        </section>
     );
 }
 

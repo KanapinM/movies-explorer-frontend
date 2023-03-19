@@ -3,8 +3,10 @@
     min-height: 45px;
     padding: 0 0 0 22px;
     color: #A0A0A0;
+    border: solid rgba(170, 170, 170, .2);
     border-width: 1.5px;
-    border-color: #AAAAAA;
+    background: transparent;
+    border-style: solid;
     border-radius: 50px;
     width: 79.65%;
     max-width: 932px;
