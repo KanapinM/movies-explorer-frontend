@@ -1,9 +1,9 @@
 .search__button {
     border: none;
     padding: 0;
-    right: 19%;
+    right: 20.8%;
     padding: 0;
-    margin: 5.62px 0 0;
+    margin: 5.4px 0 0;
     display: flex;
     background: center;
     position: absolute;
@@ -17,18 +17,7 @@
 
 @media screen and (max-width: 1279px) {
     .search__button {
-        right: 1%;
-    }
-}
-
-@media screen and (max-width: 768px) {
-    .search__button {
-        right: 1%;
-    }
-}
-
-@media screen and (max-width: 320px) {
-    .search__button {
-        right: 1%;
+        right: 0;
+        margin: 5.6px 7PX 0 0;
     }
 }

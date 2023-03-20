@@ -8,7 +8,7 @@ function SearchForm() {
                 placeholder="Фильм"
                 className="search__input"
                 name="movie"
-                type="movie"
+                type="search"
                 required
             />
             <button className="search__button">

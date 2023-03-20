@@ -3,24 +3,23 @@ import Portfolio from '../Portfolio/Portfolio';
 
 function AboutMe() {
     return (
-        <section className="aboutMe">
-            <a name="aboutMe" />
-            <h3 className="aboutMe__title">
+        <section id="about-me" className="about-me">
+            <h3 className="about-me__title">
                 Студент
             </h3>
-            <div className="aboutMe__container">
+            <div className="about-me__container">
                 <div>
-                    <h4 className="aboutMe__name">Виталий</h4>
-                    <p className="aboutMe__info">
+                    <h4 className="about-me__name">Виталий</h4>
+                    <p className="about-me__info">
                         Фронтенд-разработчик, 30 лет
                     </p>
-                    <p className="aboutMe__text">
+                    <p className="about-me__text">
                         Я родился и живу в Саратове, закончил факультет экономики СГУ. У меня есть жена и дочь. Я люблю слушать музыку, а ещё увлекаюсь бегом. Недавно начал кодить.
                         С 2015 года работал в компании «СКБ Контур». После того, как прошёл курс по веб-разработке, начал заниматься фриланс-заказами и ушёл с постоянной работы.
                     </p>
-                    <a className="aboutMe__link" href="https://github.com/KanapinM" target="_blank" rel="noreferrer">Github</a>
+                    <a className="about-me__link" href="https://github.com/KanapinM" target="_blank" rel="noreferrer">Github</a>
                 </div>
-                <img className="aboutMe__avatar" src={avatar} alt="avatar"></img>
+                <img className="about-me__avatar" src={avatar} alt="avatar"></img>
             </div>
             <Portfolio />
         </section>

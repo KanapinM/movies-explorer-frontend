@@ -18,7 +18,7 @@
 @media screen and (max-width: 1279px) {
     .search__input {
         margin: 0 0 38px 0;
-        width: 97%;
+        width: 100%;
         max-width: 100%;
     }
 }
@@ -29,7 +29,6 @@
         padding: 0 0 0 18px;
         font-size: 11px;
         line-height: 18px;
-        width: 97%;
         max-width: 100%;
     }
 }
@@ -40,7 +39,6 @@
         margin: 0 0 45px 0;
         font-size: 11px;
         line-height: 18px;
-        width: 97%;
         max-width: 100%;
     }
 }

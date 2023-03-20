@@ -18,11 +18,16 @@
     }
 }
 
-@media screen and (max-width: 320px) {
+@media screen and (max-width: 550px) {
     .promo {
         margin: 14px auto 0;
-        width: 100%;
+        width: 92.2%;
         height: 586px;
+    }
+}
+
+@media screen and (max-width: 320px) {
+    .promo {
         max-width: 292px;
     }
 }

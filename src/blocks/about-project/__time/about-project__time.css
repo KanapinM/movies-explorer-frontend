@@ -1,0 +1,18 @@
+.about-project__time {
+    margin-bottom: 14px;
+    display: flex;
+}
+
+.about-project__time:last-child {
+    margin-bottom: 0;
+}
+
+@media screen and (max-width: 440px) {
+    .about-project__time {
+        margin-bottom: 10px;
+    }
+
+    .about-project__time:last-child {
+        margin-bottom: 0;
+    }
+}

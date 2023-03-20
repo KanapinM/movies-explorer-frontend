@@ -9,7 +9,7 @@
     }
 }
 
-@media screen and (max-width: 320px) {
+@media screen and (max-width: 550px) {
     .navtab {
         margin: 212px auto 17px;
     }

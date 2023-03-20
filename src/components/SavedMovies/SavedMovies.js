@@ -9,9 +9,8 @@ function SavedMovies(props) {
     }
     return (
         <>
-            {/* <Header /> */}
             <SearchForm />
-            <div className="cardsContainer">
+            <div className="cards-container">
                 <div className="card">
                     <img
                         className="card__photo"
@@ -70,7 +69,6 @@ function SavedMovies(props) {
 
 
             </div>
-            {/* <Footer /> */}
         </>
     );
 }

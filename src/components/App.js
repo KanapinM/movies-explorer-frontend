@@ -21,6 +21,7 @@ import ImagePopup from '../components/Popup/ImagePopup/ImagePopup';
 import EditProfilePopup from '../components/EditProfilePopup/EditProfilePopup'
 import Notfound from '../components/Notfound/Notfound';
 
+
 function App() {
   const history = useHistory();
   const [isEditProfilePopupOpen, setIsEditProfilePopupOpen] = React.useState(false);
@@ -166,7 +167,6 @@ function App() {
             component={Movies}
             loggedIn={loggedIn}
             cards={cards}
-            onEditProfile={handleEditProfileClick}
             onCardClick={handleCardClick}
             onCardLike={handleCardLike}
           />
@@ -176,7 +176,6 @@ function App() {
             component={SavedMovies}
             loggedIn={loggedIn}
             cards={cards}
-            onEditProfile={handleEditProfileClick}
             onCardClick={handleCardClick}
             onCardLike={handleCardLike}
           />

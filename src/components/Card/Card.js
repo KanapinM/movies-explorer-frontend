@@ -19,7 +19,6 @@ function Card({ card, onCardClick, onCardLike }) {
 
     return (
         <article id="template" className="card">
-
             <img
                 onClick={handleClickImage}
                 className="card__photo"

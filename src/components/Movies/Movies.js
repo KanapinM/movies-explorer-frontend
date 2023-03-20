@@ -7,9 +7,8 @@ function Movies(props) {
 
     return (
         <>
-            {/* <Header /> */}
             <SearchForm />
-            <div className="cardsContainer">
+            <div className="cards-container">
                 {props.cards.map(({ ...card }) =>
                     <Card
                         onCardClick={props.onCardClick}
@@ -22,7 +21,6 @@ function Movies(props) {
                 )}
             </div>
             <button className="more-button">Ещё</button>
-            {/* <Footer /> */}
         </>
     );
 }

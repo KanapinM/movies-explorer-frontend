@@ -28,3 +28,9 @@
         max-width: 292px;
     }
 }
+
+@media screen and (max-width: 300px) {
+    .promo__title {
+        font-size: 22px;
+    }
+}
