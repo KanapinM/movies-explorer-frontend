@@ -1,0 +1,9 @@
+.user__submit-button_login {
+    margin-top: 221px;
+}
+
+@media screen and (max-width: 320px) {
+    .user__submit-button_login {
+        margin-top: 309px;
+    }
+}

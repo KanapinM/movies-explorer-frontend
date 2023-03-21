@@ -1,0 +1,32 @@
+.techs__title {
+    margin: 0 auto 90px;
+    padding-bottom: 23px;
+    font-family: 'Inter', Arial, sans-serif;
+    font-style: normal;
+    font-weight: 400;
+    font-size: 22px;
+    line-height: 27px;
+    border: solid rgb(1, 1, 1);
+    border-width: 0 0 1px;
+    width: 89.06%;
+    max-width: 1140px;
+}
+
+@media screen and (max-width: 768px) {
+    .techs__title {
+        margin: 0 auto 80px;
+        width: 87%;
+        max-width: 668px;
+    }
+}
+
+@media screen and (max-width: 320px) {
+    .techs__title {
+        margin: 0 auto 60px;
+        padding-bottom: 28px;
+        font-size: 18px;
+        line-height: 22px;
+        width: 88.8%;
+        max-width: 284px;
+    }
+}

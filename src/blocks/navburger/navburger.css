@@ -1,0 +1,10 @@
+.navburger {
+    display: none;
+}
+
+
+@media screen and (max-width: 768px) {
+    .navburger {
+        display: block;
+    }
+}

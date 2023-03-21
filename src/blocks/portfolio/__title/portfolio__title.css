@@ -1,0 +1,23 @@
+.portfolio__title {
+    margin: 100px 0 50px;
+    font-family: 'Inter', Arial, sans-serif;
+    font-style: normal;
+    font-weight: 400;
+    font-size: 18px;
+    line-height: 20px;
+    color: #A0A0A0;
+}
+
+@media screen and (max-width: 768px) {
+    .portfolio__title {
+        margin: 90px 0 50px;
+    }
+}
+
+@media screen and (max-width: 320px) {
+    .portfolio__title {
+        margin: 70px 0 40px;
+        font-size: 14px;
+        line-height: 20px;
+    }
+}

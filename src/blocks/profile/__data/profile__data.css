@@ -1,0 +1,21 @@
+.profile__data {
+    padding-bottom: 16px;
+    margin-bottom: 17px;
+    display: flex;
+    justify-content: space-between;
+    width: 410px;
+    border: solid #E8E8E8;
+    border-width: 0 0 1px;
+}
+
+.profile__data:last-child {
+    padding-bottom: 0;
+    margin-bottom: 0;
+    border: none;
+}
+
+@media screen and (max-width: 410px) {
+    .profile__data {
+        width: 260px;
+    }
+}

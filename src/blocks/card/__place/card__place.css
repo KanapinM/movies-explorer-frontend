@@ -1,0 +1,19 @@
+.card__place {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    width: 270px;
+    height: 24px;
+}
+
+@media screen and (max-width: 768px) {
+    .card__place {
+        width: 339px;
+    }
+}
+
+@media screen and (max-width: 360px) {
+    .card__place {
+        width: 100%;
+    }
+}

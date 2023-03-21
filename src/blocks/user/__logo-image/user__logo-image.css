@@ -1,0 +1,15 @@
+.user__logo-image {
+    margin: 0 0 40px;
+    align-self: start;
+    width: 38px;
+}
+
+.user__logo-image:hover {
+    opacity: 0.8;
+}
+
+@media screen and (max-width: 410px) {
+    .user__logo-image {
+        margin: 0 auto 50px;
+    }
+}

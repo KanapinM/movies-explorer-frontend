@@ -1,0 +1,9 @@
+.user__submit-button_register {
+    margin-top: 152px;
+}
+
+@media screen and (max-width: 320px) {
+    .user__submit-button_register {
+        margin-top: 240px;
+    }
+}

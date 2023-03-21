@@ -1,0 +1,19 @@
+.notfound__container {
+    padding: 35vh 0 8.5vh;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    background-color: #FFFFFF;
+}
+
+@media screen and (max-width: 768px) {
+    .notfound__container {
+        margin: 39.8vh auto 21.6vh;
+    }
+}
+
+@media screen and (max-width: 320px) {
+    .notfound__container {
+        margin: 42.1vh auto 3.8vh;
+    }
+}

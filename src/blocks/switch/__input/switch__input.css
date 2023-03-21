@@ -1,0 +1,15 @@
+.switch__input {
+    height: 0;
+    width: 0;
+    opacity: 0;
+}
+
+.switch__input:checked+.switch__slider {
+    background-color: #2BE080;
+}
+
+.switch__input:checked+.switch__slider::before {
+    transform: translateX(16px);
+    -webkit-transform: translateX(16px);
+    -ms-transform: translateX(16px);
+}

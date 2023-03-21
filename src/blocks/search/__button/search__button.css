@@ -1,0 +1,23 @@
+.search__button {
+    border: none;
+    padding: 0;
+    right: 20.8%;
+    padding: 0;
+    margin: 5.4px 0 0;
+    display: flex;
+    background: center;
+    position: absolute;
+    cursor: pointer;
+    transition: ease-in-out 0.3s;
+}
+
+.search__button:hover {
+    opacity: 0.8;
+}
+
+@media screen and (max-width: 1279px) {
+    .search__button {
+        right: 0;
+        margin: 5.6px 7PX 0 0;
+    }
+}
