@@ -1,13 +1,11 @@
 import React from 'react';
 import { CurrentUserContext } from '../../contexts/CurrentUserContext';
-// import Header from '../Header/Header';
 
 function Profile({ ...props }) {
     const userData = React.useContext(CurrentUserContext);
 
     return (
         <section className='profile'>
-            {/* <Header /> */}
             <div className="profile__container">
                 <h2 className="profile__title">
                     Привет, {userData.name}!
@@ -20,7 +18,7 @@ function Profile({ ...props }) {
                         </div>
                         <div className='profile__data'>
                             <p className='profile__data-type'>E-mail</p>
-                            <p className='profile__data-person'>{props.email}</p>
+                            <p className='profile__data-person'>{userData.email}</p>
                         </div>
                     </div>
                     <button

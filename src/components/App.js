@@ -3,8 +3,8 @@ import { Switch, Route, useHistory, useLocation } from 'react-router-dom';
 
 import { CurrentUserContext } from '../contexts/CurrentUserContext';
 
-import api from '../utils/Api';
-import auth from '../utils/Auth';
+import moviesApi from '../utils/MoviesApi';
+import mainApi from '../utils/MainApi';
 
 import ProtectedRoute from '../components/ProtectedRoute/ProtectedRoute';
 import Login from '../components/Login/Login';
@@ -25,52 +25,73 @@ import Notfound from '../components/Notfound/Notfound';
 function App() {
   const history = useHistory();
   const [isEditProfilePopupOpen, setIsEditProfilePopupOpen] = React.useState(false);
-  const [selectedCard, setSelectedCard] = React.useState(null);
-  const [currentUser, setCurrentUser] = React.useState(null);
-  const [loggedIn, setLoggedIn] = React.useState(false);
+  const [currentUser, setCurrentUser] = React.useState({ email: '', name: '' });
+  // const [loggedIn, setLoggedIn] = React.useState(token ? true : false);
+  const [loggedIn, setLoggedIn] = React.useState((document.cookie !== '') ? true : false);
+
   const [cards, setCards] = React.useState([]);
   const [isInfoTooltipOpen, setInfoTooltipOpen] = React.useState(false);
   const [email, setEmail] = React.useState('');
   const [isSuccessTooltipStatus, setTooltipStatus] = React.useState(false);
+  // const [moviesLastSearch, setMoviesLastSearch] = React.useState('');
 
   React.useEffect(() => {
     checkToken();
   }, []);
+
+  React.useEffect(() => {
+    if (loggedIn && (location.pathname === '/signup' || location.pathname === '/signin')) {
+      history.push('/');
+    }
+  }, [])
+
+  // React.useEffect(() => {
+  //   if (loggedIn) {
+  //     mainApi.getUserData()
+  //       .then((user) => {
+  //         setLoggedIn(true);
+  //         setCurrentUser(user);
+  //       })
+  //       .catch((err) => console.log(err))
+  //   }
+  // }, [loggedIn])
+
   React.useEffect(() => {
     if (loggedIn) {
-      Promise.all([api.getUserData(), api.getInitialCards()])
+      Promise.all([mainApi.getUserData(), moviesApi.getInitialMovies()])
         .then(([user, cards]) => {
+          setLoggedIn(true);
           setCurrentUser(user);
           setCards(cards);
         })
         .catch((err) => console.log(err))
     }
   }, [loggedIn])
+
+  React.useEffect(() => { }, [cards]);
+
   const location = useLocation();
-  const hiddenHeader = ['/signup', '/signin', '/notfound'].includes(location.pathname);
-  const hiddenFooter = ['/signup', '/signin', '/profile', '/notfound'].includes(location.pathname);
+  const showHeader = ['/movies', '/saved-movies', '/', '/profile'].includes(location.pathname);
+  const showFooter = ['/movies', '/saved-movies', '/'].includes(location.pathname);
 
   function handleEditProfileClick() {
     setIsEditProfilePopupOpen(true);
   }
 
-
-  function handleCardClick(card) {
-    setSelectedCard(card);
-  }
-
   function handleCardLike(card) {
-    const isLiked = card.likes.some(i => i._id === currentUser._id);
-    api
-      .changeLikeCardStatus(card._id, !isLiked)
-      .then((newCard) => {
-        setCards((state) => state.map((c) => c._id === card._id ? newCard : c));
-      })
-      .catch((err) => console.log(err))
+    // const isLiked = card.likes.some(i => i._id === currentUser._id);
+    // mainApi
+    //   .changeLikeCardStatus(card._id, !isLiked)
+    //   .then((newCard) => {
+    //     setCards((state) => state.map((c) => c._id === card._id ? newCard : c));
+    //   })
+    //   .catch((err) => console.log(err))
+    setCards(card);
+    console.log(card);
   }
 
   function handleUpdateUser(dataUser) {
-    api
+    mainApi
       .editUserData(dataUser)
       .then((res) => {
         setCurrentUser(res);
@@ -80,13 +101,15 @@ function App() {
   }
 
   function handleLogin(email, password) {
-    auth
+    mainApi
       .signin(email, password)
       .then((data) => {
         if (data.token) {
           setEmail(email);
+
           setLoggedIn(true);
           history.push('/movies');
+          console.log(data);
           return data;
         }
       })
@@ -96,14 +119,15 @@ function App() {
       });
   }
 
-  function handleRegister(email, password) {
-    auth
-      .signup(email, password)
+  function handleRegister(email, password, name) {
+    mainApi
+      .signup(email, password, name)
       .then((data) => {
         if (data) {
           setEmail(email);
+          setLoggedIn(true);
           openTooltip(true);
-          history.push('/signin');
+          history.push('/movies');
         }
       })
       .catch((err) => {
@@ -113,20 +137,20 @@ function App() {
   }
 
   function onQuit() {
-    localStorage.removeItem('jwt');
+    console.log('вы вышли');
+    document.cookie = '';
+    localStorage.clear();
     setLoggedIn(false);
   }
 
   function checkToken() {
-    const jwt = localStorage.getItem('jwt');
-    if (jwt) {
-      return auth
-        .checkToken(jwt)
+    if (document.cookie !== '') {
+      return mainApi
+        .checkToken()
         .then((res) => {
           if (res) {
             setLoggedIn(true);
-            setEmail(res.data.email);
-            history.push('/');
+            setEmail(res.email);
           }
         })
         .catch((err) => console.log(err));
@@ -141,24 +165,20 @@ function App() {
 
   const closeAllPopups = () => {
     setIsEditProfilePopupOpen(false);
-    setSelectedCard(null);
     setInfoTooltipOpen(false);
   }
 
   return (
     <CurrentUserContext.Provider value={currentUser}>
-      {hiddenHeader ? <></> : <Header />}
+      {showHeader ? <Header loggedIn={loggedIn} /> : <></>}
       <main>
         <Switch>
-          <Route path="/signup">
-            <Register auth={auth} onSubmit={handleRegister} />
+          <Route loggedIn={loggedIn} path="/signup">
+            <Register onSubmit={handleRegister} />
           </Route>
 
-          <Route path="/signin">
-            <Login auth={auth} onSubmit={handleLogin} />
-          </Route>
-          <Route path="/notfound">
-            <Notfound />
+          <Route loggedIn={loggedIn} path="/signin">
+            <Login onSubmit={handleLogin} />
           </Route>
 
           <ProtectedRoute
@@ -167,7 +187,11 @@ function App() {
             component={Movies}
             loggedIn={loggedIn}
             cards={cards}
-            onCardClick={handleCardClick}
+
+            // lastSearchInput={moviesLastSearch}
+            // setLastSearchInput={setMoviesLastSearch}
+
+            // onCardClick={handleCardClick}
             onCardLike={handleCardLike}
           />
           <ProtectedRoute
@@ -176,25 +200,33 @@ function App() {
             component={SavedMovies}
             loggedIn={loggedIn}
             cards={cards}
-            onCardClick={handleCardClick}
-            onCardLike={handleCardLike}
+          // onCardClick={handleCardClick}
+          // onCardLike={handleCardLike}
           />
           <ProtectedRoute
             path="/profile"
+            cards={cards}
             component={Profile}
             loggedIn={loggedIn}
             email={email}
             onEditProfile={handleEditProfileClick}
             onQuit={onQuit}
           />
+
+
           <Route
-            path="/"
+            exact path="/"
             component={Main}
           />
 
+          <Route exact path="*">
+            <Notfound />
+          </Route>
+
         </Switch>
       </main>
-      {hiddenFooter ? <></> : <Footer />}
+
+      {showFooter ? <Footer /> : <></>}
 
       <EditProfilePopup
         isEditProfilePopupOpen={isEditProfilePopupOpen}
@@ -202,7 +234,7 @@ function App() {
         onUpdateUser={handleUpdateUser}
       />
       <ImagePopup
-        card={selectedCard}
+        // card={selectedCard}
         onClose={closeAllPopups}
       />
       <InfoTooltip

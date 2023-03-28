@@ -27,3 +27,8 @@
         line-height: 15px;
     }
 }
+
+.user__submit-button_disabled {
+    background-color: #F8F8F8;
+    color: #C2C2C2;
+}

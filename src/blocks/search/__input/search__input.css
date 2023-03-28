@@ -2,7 +2,7 @@
     margin-right: 41px;
     min-height: 45px;
     padding: 0 0 0 22px;
-    color: #A0A0A0;
+    color: black;
     border: solid rgba(170, 170, 170, .2);
     border-width: 1.5px;
     background: transparent;
@@ -13,6 +13,10 @@
     font-weight: 400;
     font-size: 14px;
     line-height: 18px;
+}
+
+.search__input::placeholder {
+    color: #A0A0A0;
 }
 
 @media screen and (max-width: 1279px) {

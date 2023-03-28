@@ -3,7 +3,7 @@
     padding: 13px 0 14px;
     max-width: 358px;
     text-align: center;
-    background-color: black;
+    background-color: #3456F3;
     color: white;
     border: none;
     cursor: pointer;
@@ -27,4 +27,9 @@
         font-size: 14px;
         line-height: 17px;
     }
+}
+
+.popup__submit-button_disabled {
+    background-color: #F8F8F8;
+    color: #C2C2C2;
 }

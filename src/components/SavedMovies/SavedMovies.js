@@ -1,74 +1,104 @@
 import React from 'react';
 import SearchForm from '../SearchForm/SearchForm';
-// import Card from '../Card/Card';
+import Card from '../Card/Card';
+import Preloader from '../Preloader/Preloader';
+import mainApi from '../../utils/MainApi';
 
 
 function SavedMovies(props) {
-    function handleCardDelete() {
-        console.log('Обработка удаления фильма');
+    const [toggle, setToggle] = React.useState(false);
+    const [showPreloader, setShowPreloader] = React.useState(true);
+    const [cards, setCards] = React.useState([]);
+    // const [someDelete, setSomeDelete] =React.useState(true);
+    const [somethingSearched, setSomethingSearched] = React.useState(true);
+
+
+    // function handleCardDelete() {
+    //     console.log('Обработка удаления фильма');
+    // }
+
+    let searchedSavedMovies = JSON.parse(localStorage.getItem('searchedSavedMovies'));
+    let savedMovies = JSON.parse(localStorage.getItem('savedMovies'));
+    React.useEffect((res) => {
+
+        mainApi.getSavedMovies()
+            .then((res) => {
+                console.log(res);
+                localStorage.setItem('savedMovies', JSON.stringify(res));
+                // console.log(props.onSubmit);
+                console.log(searchedSavedMovies);
+                console.log(savedMovies);
+                // setCards(res);
+                // setCards(searchedSavedMovies);
+                setShowPreloader(false);
+
+                if (searchedSavedMovies.length === 0) {
+                    return console.log('пусто');
+                }
+                console.log('не пусто');
+            })
+            .catch((err) => console.log(err))
+        // }, [searchedSavedMovies, props.onSubmit, setCards, savedMovies, somethingSearched])
+    }, [searchedSavedMovies, props.onSubmit, savedMovies, somethingSearched, toggle])
+
+
+    async function search(req) {
+        console.log(req);
+        localStorage.setItem('lastSavedMoviesSearch', JSON.stringify(req));
+        setSomethingSearched(true);
+        try {
+            let listMovies = savedMovies.filter((movie) => {
+                setShowPreloader(true)
+                if (toggle !== false) {
+                    console.log("short");
+                    setToggle(true);
+
+                    if (movie.duration < 40) {
+                        return movie.nameRU.toLowerCase().includes(req.toLowerCase());
+                    }
+                }
+                if (toggle === false) {
+                    console.log("norm");
+
+                    setToggle(false);
+
+                    return movie.nameRU.toLowerCase().includes(req.toLowerCase());
+                }
+
+            });
+            console.log(listMovies);
+            console.log(toggle);
+            localStorage.setItem('searchedSavedMovies', JSON.stringify(listMovies));
+            console.log(searchedSavedMovies);
+            console.log(toggle);
+            // setCards(searchedSavedMovies);
+            return
+        } catch (err) {
+            console.log(err);
+        }
     }
+
     return (
         <>
-            <SearchForm />
-            <div className="cards-container">
-                <div className="card">
-                    <img
-                        className="card__photo"
-                        src="https://cdn.ananasposter.ru/image/cache/catalog/poster/games/985-1000x830.jpg"
-                        alt="mortal cobat"
-                    />
-                    <div className="card__place">
-                        <h2 className="card__tittle">mortal cobat</h2>
-                        <div className="card__container">
-                            <button
-                                onClick={handleCardDelete}
-                                type="button"
-                                className="card__delete-movie"
-                            />
-                        </div>
-                    </div>
-                    <p className='card__chrono'>1ч 42м</p>
-                </div>
 
-                <div className="card">
-                    <img
-                        className="card__photo"
-                        src="https://proprikol.ru/wp-content/uploads/2021/05/kartinki-titanik-6.jpg"
-                        alt="титаник"
-                    />
-                    <div className="card__place">
-                        <h2 className="card__tittle">Титаник</h2>
-                        <div className="card__container">
-                            <button
-                                onClick={handleCardDelete}
-                                type="button"
-                                className="card__delete-movie"
-                            />
-                        </div>
-                    </div>
-                    <p className='card__chrono'>1ч 42м</p>
-                </div>
-                <div className="card">
-                    <img
-                        className="card__photo"
-                        src="https://www.film.ru/sites/default/files/filefield_paths/watchmen.jpg"
-                        alt="хранители"
-                    />
-                    <div className="card__place">
-                        <h2 className="card__tittle">Хранители</h2>
-                        <div className="card__container">
-                            <button
-                                onClick={handleCardDelete}
-                                type="button"
-                                className="card__delete-movie"
-                            />
-                        </div>
-                    </div>
-                    <p className='card__chrono'>2ч 42м</p>
-                </div>
+            <SearchForm onSubmit={search} toggle={setToggle} setShowPreloader={setShowPreloader} />
+            {showPreloader ? <Preloader /> : <></>}
+            {(searchedSavedMovies === null) ? <></> :
+                <div className="cards-container" cards={cards}>
+                    {savedMovies.map(({ ...card }) =>
+                        <Card
+                            // onCardClick={props.onCardClick}
+                            onCardLike={props.handleCardDelete}
+                            // onCardAgreement={props.onCardAgreement}
+                            card={card}
+                            key={card.id}
+                            {...card}
+                        />
+                    )}
 
-
-            </div>
+                    {(searchedSavedMovies.length === 0) ? <p>Ничего не найдено</p> : <></>}
+                </div>
+            }
         </>
     );
 }

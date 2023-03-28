@@ -1,5 +1,5 @@
 .user__input {
-    margin: 0px auto 24px;
+    margin: 0px auto 18px;
     padding: 0 0 10px 0;
     color: black;
     border-width: 0 0 1px 0;
@@ -22,4 +22,12 @@
         min-width: 260px;
         margin-bottom: 0px auto 20px;
     }
+}
+
+.user__input_error {
+    margin: 0px auto 6px;
+}
+
+.user__input_error:focus {
+    border-color: red;
 }
