@@ -20,13 +20,10 @@ function SavedMovies(props) {
 
                 setShowPreloader(false);
                 console.log(savedMovies);
-                if (searchedSavedMovies.length === 0) {
-                    return console.log('фильма нет в сохраненных');
-                }
-                console.log('фильм есть в сохраненных');
+
             })
             .catch((err) => console.log(err))
-    }, [searchedSavedMovies, savedMovies, toggle])
+    }, [searchedSavedMovies, savedMovies])
 
 
     async function search(req) {
