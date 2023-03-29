@@ -26,14 +26,12 @@ function App() {
   const history = useHistory();
   const [isEditProfilePopupOpen, setIsEditProfilePopupOpen] = React.useState(false);
   const [currentUser, setCurrentUser] = React.useState({ email: '', name: '' });
-  // const [loggedIn, setLoggedIn] = React.useState(token ? true : false);
   const [loggedIn, setLoggedIn] = React.useState((document.cookie !== '') ? true : false);
 
   const [cards, setCards] = React.useState([]);
   const [isInfoTooltipOpen, setInfoTooltipOpen] = React.useState(false);
   const [email, setEmail] = React.useState('');
   const [isSuccessTooltipStatus, setTooltipStatus] = React.useState(false);
-  // const [moviesLastSearch, setMoviesLastSearch] = React.useState('');
 
   React.useEffect(() => {
     checkToken();
@@ -45,16 +43,6 @@ function App() {
     }
   }, [])
 
-  // React.useEffect(() => {
-  //   if (loggedIn) {
-  //     mainApi.getUserData()
-  //       .then((user) => {
-  //         setLoggedIn(true);
-  //         setCurrentUser(user);
-  //       })
-  //       .catch((err) => console.log(err))
-  //   }
-  // }, [loggedIn])
 
   React.useEffect(() => {
     if (loggedIn) {
@@ -79,15 +67,7 @@ function App() {
   }
 
   function handleCardLike(card) {
-    // const isLiked = card.likes.some(i => i._id === currentUser._id);
-    // mainApi
-    //   .changeLikeCardStatus(card._id, !isLiked)
-    //   .then((newCard) => {
-    //     setCards((state) => state.map((c) => c._id === card._id ? newCard : c));
-    //   })
-    //   .catch((err) => console.log(err))
     setCards(card);
-    console.log(card);
   }
 
   function handleUpdateUser(dataUser) {
@@ -109,7 +89,6 @@ function App() {
 
           setLoggedIn(true);
           history.push('/movies');
-          console.log(data);
           return data;
         }
       })
@@ -137,10 +116,17 @@ function App() {
   }
 
   function onQuit() {
-    console.log('вы вышли');
-    document.cookie = '';
     localStorage.clear();
+    console.log('вы вышли');
+    document.cookie = 'undefind';
     setLoggedIn(false);
+
+    mainApi
+      .logout()
+      .catch((err) => {
+        console.log(err);
+        openTooltip(false);
+      });
   }
 
   function checkToken() {
@@ -188,10 +174,6 @@ function App() {
             loggedIn={loggedIn}
             cards={cards}
 
-            // lastSearchInput={moviesLastSearch}
-            // setLastSearchInput={setMoviesLastSearch}
-
-            // onCardClick={handleCardClick}
             onCardLike={handleCardLike}
           />
           <ProtectedRoute
@@ -199,9 +181,8 @@ function App() {
             path="/saved-movies"
             component={SavedMovies}
             loggedIn={loggedIn}
-            cards={cards}
-          // onCardClick={handleCardClick}
-          // onCardLike={handleCardLike}
+          // cards={cards}
+
           />
           <ProtectedRoute
             path="/profile"
@@ -234,7 +215,6 @@ function App() {
         onUpdateUser={handleUpdateUser}
       />
       <ImagePopup
-        // card={selectedCard}
         onClose={closeAllPopups}
       />
       <InfoTooltip

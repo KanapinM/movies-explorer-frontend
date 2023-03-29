@@ -41,7 +41,6 @@ class MainApi {
                 return this._response(res);
             })
             .then((data) => {
-                console.log(data);
                 return data;
             });
     }
@@ -105,21 +104,16 @@ class MainApi {
             })
     }
 
-    // removeCard(cardId) {
-    //     return fetch(`${this._myURL}/cards/${cardId}`, {
-    //         method: 'DELETE',
-    //         headers: this._headers,
-    //         credentials: this.credentials,
-
-    //     })
-    //     .then((res) => {
-    //         return this._response(res);
-    //     })
-    // }
-
-    // changeLikeCardStatus(cardId, isLiked) {
-    //     return isLiked ? this.likeCard(cardId) : this.unlikeCard(cardId);
-    // }
+    logout() {
+        return fetch(`${this._URL}/signout`, {
+            method: 'POST',
+            headers: this._headers,
+            credentials: this.credentials,
+        })
+            .then((res) => {
+                return this._response(res);
+            })
+    }
 
     getSavedMovies() {
         return fetch(`${this._URL}/movies`, {

@@ -6,7 +6,6 @@ import { useLocation } from 'react-router-dom';
 function SearchForm({
     onSubmit,
     toggle,
-    // lastSearchInput
 }) {
     let lastMoviesSearch = JSON.parse(localStorage.getItem('lastMoviesSearch'));
     let lastSavedMoviesSearch = JSON.parse(localStorage.getItem('lastSavedMoviesSearch'));
@@ -15,7 +14,6 @@ function SearchForm({
 
     const [еmptyForm, setEmptyForm] = React.useState(false);
     const [checked, setChecked] = React.useState();
-    // const [lastSearch, setLastSearch] = React.useState(lastSearchInput);
     const [input, setInput] = React.useState('');
     React.useEffect(() => {
         if (input === '') {
@@ -26,46 +24,33 @@ function SearchForm({
     }, [input]);
     React.useEffect(() => {
         setEmptyForm(false);
-        // setInput(lastSearch || input);
         setInput(input);
-        // }, [lastSearch, input]);
     }, [input, checked]);
 
     function handleSwitchClick() {
         if (checked === false) {
             setChecked(true);
             toggle(checked);
-            console.log(toggle);
             return checked;
         }
         setChecked(false);
         toggle(checked);
-        console.log(toggle);
         return checked;
     }
 
     function handleSubmit(e) {
         e.preventDefault();
-        // console.log(input);
-        // console.log(checked);
         if (input === '') {
             setEmptyForm(true);
             return;
         }
 
-        // if (input !== '') {
-        //   setShowPreloader(true);
         onSubmit(input);
-        // } else {
-        //   setIsEmptyRequest(true);
-        // }
+
     }
 
     function handleChange(e) {
         setInput(e.target.value);
-        // setLastSearch(e.target.value);
-        console.log(e.target.value);
-        // console.log(lastSearchInput);
     }
     return (
         <form >
@@ -76,7 +61,6 @@ function SearchForm({
                     className="search__input"
                     name="movie"
                     type="search"
-                    // value={input || lastSearch || ''}
                     value={input}
                     required
                 /> :
@@ -86,7 +70,6 @@ function SearchForm({
                         className="search__input"
                         name="movie"
                         type="search"
-                        // value={input || lastSearch || ''}
                         value={input || ""}
                         required
                     />
