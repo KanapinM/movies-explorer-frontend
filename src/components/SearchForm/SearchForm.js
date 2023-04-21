@@ -8,13 +8,13 @@ function SearchForm({
     toggle,
 }) {
     let lastMoviesSearch = JSON.parse(localStorage.getItem('lastMoviesSearch'));
-    let lastSavedMoviesSearch = JSON.parse(localStorage.getItem('lastSavedMoviesSearch'));
     const location = useLocation();
     const locationMovies = ['/movies'].includes(location.pathname);
 
     const [еmptyForm, setEmptyForm] = React.useState(false);
     const [checked, setChecked] = React.useState();
     const [input, setInput] = React.useState('');
+    const [searchedValue, setSearchedValue] = React.useState(lastMoviesSearch);
     React.useEffect(() => {
         if (input === '') {
             setEmptyForm(true);
@@ -24,7 +24,11 @@ function SearchForm({
     }, [input]);
     React.useEffect(() => {
         setEmptyForm(false);
-        setInput(input);
+
+        setInput(searchedValue || input);
+        if (!locationMovies) {
+            setInput(input);
+        }
     }, [input, checked]);
 
     function handleSwitchClick() {
@@ -40,6 +44,7 @@ function SearchForm({
 
     function handleSubmit(e) {
         e.preventDefault();
+        console.log(searchedValue);
         if (input === '') {
             setEmptyForm(true);
             return;
@@ -51,26 +56,27 @@ function SearchForm({
 
     function handleChange(e) {
         setInput(e.target.value);
+        setSearchedValue(e.target.value);
     }
     return (
         <form >
             <div className="search">
                 {locationMovies ? <input
                     onChange={handleChange}
-                    placeholder={lastMoviesSearch || 'Фильм'}
+                    placeholder={'Фильм'}
                     className="search__input"
                     name="movie"
                     type="search"
-                    value={input}
+                    value={searchedValue || input}
                     required
                 /> :
                     <input
                         onChange={handleChange}
-                        placeholder={lastSavedMoviesSearch || 'Фильм'}
+                        placeholder={'Фильм'}
                         className="search__input"
                         name="movie"
                         type="search"
-                        value={input || ""}
+                        value={input}
                         required
                     />
                 }
