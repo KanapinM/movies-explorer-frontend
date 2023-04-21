@@ -10,8 +10,8 @@ function Movies(props) {
     const [showPreloader, setShowPreloader] = React.useState(true);
 
     let searchedMovies = JSON.parse(localStorage.getItem('searchedMovies'));
-    React.useEffect(() => {
 
+    React.useEffect(() => {
         setShowPreloader(false)
 
     }, [searchedMovies, toggle])
@@ -52,8 +52,12 @@ function Movies(props) {
             {(searchedMovies === null) ? <></> : <div className="cards-container" cards={props.cards}>
                 {searchedMovies.map(({ ...card }) =>
                     <Card
+                        handleCardLike={props.handleCardLike}
                         card={card}
-                        // key={card.id}
+                        key={card.id}
+                        savedCards={props.savedCards}
+                        // isLiked={props.isLiked}
+                        // setIsLiked={props.setIsLiked}
                         {...card}
                     />
                 )}

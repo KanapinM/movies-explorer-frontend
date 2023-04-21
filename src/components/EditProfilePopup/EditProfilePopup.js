@@ -8,6 +8,7 @@ function EditProfilePopup(props) {
     const currentUser = React.useContext(CurrentUserContext);
     const { values, handleChange, errors, isValid, setValues, setIsValid, resetForm } = useFormWithValidation();
     React.useEffect(() => {
+        resetForm();
         setValues({ name: currentUser.name, email: currentUser.email });
         setIsValid(false);
     }, [currentUser, props.isEditProfilePopupOpen]);
@@ -15,6 +16,7 @@ function EditProfilePopup(props) {
     function handleSubmit(e) {
         e.preventDefault();
         props.onUpdateUser(values);
+        console.log(e);
     }
 
     return (

@@ -19,6 +19,10 @@
     color: #A0A0A0;
 }
 
+input::-webkit-search-cancel-button {
+    display: none;
+}
+
 @media screen and (max-width: 1279px) {
     .search__input {
         margin: 0 0 38px 0;

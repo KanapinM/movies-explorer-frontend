@@ -26,12 +26,17 @@ function App() {
   const history = useHistory();
   const [isEditProfilePopupOpen, setIsEditProfilePopupOpen] = React.useState(false);
   const [currentUser, setCurrentUser] = React.useState({ email: '', name: '' });
-  const [loggedIn, setLoggedIn] = React.useState((document.cookie !== '') ? true : false);
+  const [loggedIn, setLoggedIn] = React.useState((document.cookie !== 'undefind' || '') ? true : false);
 
   const [cards, setCards] = React.useState([]);
+  const [card, setCard] = React.useState({});
+  const [savedCards, setSavedCards] = React.useState([]);
+
   const [isInfoTooltipOpen, setInfoTooltipOpen] = React.useState(false);
   const [email, setEmail] = React.useState('');
   const [isSuccessTooltipStatus, setTooltipStatus] = React.useState(false);
+  // const [isLiked, setIsLiked] = React.useState();
+
 
   React.useEffect(() => {
     checkToken();
@@ -43,20 +48,58 @@ function App() {
     }
   }, [])
 
+  const [searchedSavedMovies, setSearchedSavedMovies] = React.useState(false);
+
+
+
 
   React.useEffect(() => {
     if (loggedIn) {
-      Promise.all([mainApi.getUserData(), moviesApi.getInitialMovies()])
-        .then(([user, cards]) => {
-          setLoggedIn(true);
-          setCurrentUser(user);
+      moviesApi.getInitialMovies()
+        .then((cards) => {
           setCards(cards);
+
         })
-        .catch((err) => console.log(err))
+        .catch((err) => {
+          console.log(err);
+          openTooltip(false);
+        });
     }
   }, [loggedIn])
 
-  React.useEffect(() => { }, [cards]);
+  React.useEffect(() => {
+    if (loggedIn) {
+      Promise.all([mainApi.getUserData(), mainApi.getSavedMovies()])
+        .then(([user, userCards]) => {
+          setLoggedIn(true);
+          setCurrentUser(user);
+
+          setSavedCards(userCards);
+        })
+        .catch((err) => {
+          console.log(err);
+          openTooltip(false);
+        });
+    }
+  }, [loggedIn])
+
+
+  // React.useEffect(() => {
+  //   mainApi.getSavedMovies()
+  //     .then((res) => {
+
+  //       setSavedCards(res);
+  //       console.log(res);
+  //       console.log(savedCards);
+
+  //     })
+  //     .catch((err) => {
+  //       console.log(err);
+  //       openTooltip(false);
+  //     });
+  // }, [])
+
+
 
   const location = useLocation();
   const showHeader = ['/movies', '/saved-movies', '/', '/profile'].includes(location.pathname);
@@ -67,7 +110,28 @@ function App() {
   }
 
   function handleCardLike(card) {
-    setCards(card);
+    console.log(card);
+
+    // setSavedCards(savedCards.filter((cards) => cards.movieId === card.movieId));
+
+    mainApi.getSavedMovies()
+      .then((res) => {
+        console.log(res);
+
+        // if (savedCards.filter((cards) => cards.movieId !== card.movieId)) {
+        // console.log(123);
+        setSavedCards(res);
+        setCard(card);
+        // }
+
+        // setSavedCards(res.filter((cards) => cards.id === card.movieId));
+        console.log(savedCards);
+      })
+      .catch((err) => {
+        console.log(err);
+        openTooltip(false);
+      });
+
   }
 
   function handleUpdateUser(dataUser) {
@@ -77,7 +141,10 @@ function App() {
         setCurrentUser(res);
         closeAllPopups();
       })
-      .catch((err) => console.log(err))
+      .catch((err) => {
+        console.log(err);
+        openTooltip(false);
+      });
   }
 
   function handleLogin(email, password) {
@@ -130,7 +197,7 @@ function App() {
   }
 
   function checkToken() {
-    if (document.cookie !== '') {
+    if (document.cookie !== 'undefind' || '') {
       return mainApi
         .checkToken()
         .then((res) => {
@@ -139,8 +206,32 @@ function App() {
             setEmail(res.email);
           }
         })
-        .catch((err) => console.log(err));
+        .catch((err) => {
+          console.log(err);
+          openTooltip(false);
+        });
     }
+  }
+
+  function handleCardDelete(card) {
+    console.log(card);
+    console.log('карточка удалена');
+    mainApi
+      .remove(card._id)
+      .then(() => {
+        console.log('тут');
+
+        console.log(searchedSavedMovies);
+        setSavedCards(savedCards.filter((cards) => cards.movieId !== card.movieId));
+
+        if (searchedSavedMovies !== false) {
+          setSearchedSavedMovies(searchedSavedMovies.filter((cards) => cards.movieId !== card.movieId));
+        }
+      })
+      .catch((err) => {
+        console.log(err);
+        alert(err);
+      });
   }
 
   function openTooltip(boolean) {
@@ -173,25 +264,36 @@ function App() {
             component={Movies}
             loggedIn={loggedIn}
             cards={cards}
+            card={card}
+            savedCards={savedCards}
 
-            onCardLike={handleCardLike}
+            handleCardLike={handleCardLike}
+          // isLiked={isLiked}
+          // setIsLiked={setIsLiked}
           />
           <ProtectedRoute
             exact
             path="/saved-movies"
             component={SavedMovies}
             loggedIn={loggedIn}
-          // cards={cards}
+            cards={savedCards}
 
+            handleCardDelete={handleCardDelete}
+
+            searchedSavedMovies={searchedSavedMovies}
+            setSearchedSavedMovies={setSearchedSavedMovies}
+            card={card}
+          // isLiked={isLiked}
+          // setIsLiked={setIsLiked}
           />
           <ProtectedRoute
             path="/profile"
-            cards={cards}
             component={Profile}
             loggedIn={loggedIn}
             email={email}
             onEditProfile={handleEditProfileClick}
             onQuit={onQuit}
+
           />
 
 

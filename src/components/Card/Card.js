@@ -4,20 +4,21 @@ import { useLocation } from 'react-router-dom';
 
 
 
-function Card({ card, onCardClick, onCardLike }) {
-    let savedMovies = JSON.parse(localStorage.getItem('savedMovies'));
-    const [isLiked, setIsLiked] = React.useState();
+function Card({ card, handleCardLike, handleCardDelete, savedCards }) {
+
+    const [isLiked, setIsLiked] = React.useState(false);
 
 
     React.useEffect(() => {
         timeDuration();
-        if (savedMovies) {
-            if (savedMovies.find(i => i.movieId === card.id)) {
+        if (savedCards) {
+            if (savedCards.find(i => i.movieId === card.id)) {
                 setIsLiked(true);
+                return;
             };
-            return
-        } else return
-    }, [isLiked, savedMovies, handleCardDelete]);
+            setIsLiked(false);
+        }
+    }, [timeDuration, savedCards]);
     const [duration, setDuratiion] = React.useState('');
 
     const location = useLocation();
@@ -35,35 +36,39 @@ function Card({ card, onCardClick, onCardLike }) {
         `card__like-button ${isLiked ? 'card__like-button_active' : 'card__like-button'}`
     );
 
-    function handleCardLike() {
-        if (card.id) {
-            if (isLiked) {
-                setIsLiked(false);
-                mainApi
-                    .remove(savedMovies.find(i => i.movieId === card.id)._id);
-                console.log('карточка удалена');
-                return;
-            }
-            setIsLiked(true);
-            console.log('добавлена карточка');
+    function handleLike() {
+
+        if (isLiked) {
+
+            mainApi
+                .remove(savedCards.find(i => i.movieId === card.id)._id)
+                // .then(setIsLiked(false))
+                .catch((err) => {
+                    console.log(err);
+                    alert(err);
+                });
+
+            console.log(card);
+
+            console.log('карточка удалена');
+            console.log(savedCards);
+            handleCardLike(card);
+            return;
         }
+        console.log('добавлена карточка');
 
         mainApi
             .addSavedMovies(card)
+            // .then(setIsLiked(true))
             .catch((err) => {
                 console.log(err);
                 alert(err);
             });
-
+        handleCardLike(card);
     }
 
-    function handleCardDelete() {
-        mainApi
-            .remove(card._id)
-            .catch((err) => {
-                console.log(err);
-                alert(err);
-            });
+    function handleDelete() {
+        handleCardDelete(card);
     }
 
     return (
@@ -84,11 +89,11 @@ function Card({ card, onCardClick, onCardLike }) {
                 <h2 className="card__tittle">{card.nameRU}</h2>
                 <div className="card__container">
                     {locationMovies ? <button
-                        onClick={handleCardLike}
+                        onClick={handleLike}
                         type="button" aria-label="like"
                         className={cardLikeButtonClassName}
                     /> : <button
-                        onClick={handleCardDelete}
+                        onClick={handleDelete}
                         type="button" aria-label="like"
                         className="card__delete-movie"
                     />}

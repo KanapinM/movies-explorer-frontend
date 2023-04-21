@@ -8,28 +8,25 @@ import mainApi from '../../utils/MainApi';
 function SavedMovies(props) {
     const [toggle, setToggle] = React.useState(false);
     const [showPreloader, setShowPreloader] = React.useState(true);
-    const [cards, setCards] = React.useState([]);
 
-    let searchedSavedMovies = JSON.parse(localStorage.getItem('searchedSavedMovies'));
-    let savedMovies = JSON.parse(localStorage.getItem('savedMovies'));
+    console.log(props.cards);
+
     React.useEffect(() => {
+        props.setSearchedSavedMovies(false);
+        // if (props.cards === undefined) {
+        //     setShowPreloader(true);
+        //     return;
+        // }
 
-        mainApi.getSavedMovies()
-            .then((res) => {
-                localStorage.setItem('savedMovies', JSON.stringify(res));
+        // props.setSavedCards(props.cards);
+        setShowPreloader(false);
+    }, [])
 
-                setShowPreloader(false);
-                console.log(savedMovies);
-
-            })
-            .catch((err) => console.log(err))
-    }, [searchedSavedMovies, savedMovies])
 
 
     async function search(req) {
-        localStorage.setItem('lastSavedMoviesSearch', JSON.stringify(req));
         try {
-            let listMovies = savedMovies.filter((movie) => {
+            let listMovies = props.cards.filter((movie) => {
                 setShowPreloader(true)
                 if (toggle !== false) {
                     setToggle(true);
@@ -40,14 +37,13 @@ function SavedMovies(props) {
                 }
                 if (toggle === false) {
                     setToggle(false);
-
                     return movie.nameRU.toLowerCase().includes(req.toLowerCase());
                 }
 
             });
 
-            localStorage.setItem('searchedSavedMovies', JSON.stringify(listMovies));
-
+            props.setSearchedSavedMovies(listMovies);
+            setShowPreloader(false);
             return
         } catch (err) {
             console.log(err);
@@ -59,19 +55,38 @@ function SavedMovies(props) {
 
             <SearchForm onSubmit={search} toggle={setToggle} setShowPreloader={setShowPreloader} />
             {showPreloader ? <Preloader /> : <></>}
-            {(searchedSavedMovies === null) ? <></> :
-                <div className="cards-container" cards={cards}>
-                    {searchedSavedMovies.map(({ ...card }) =>
+            {(props.searchedSavedMovies === false || undefined || null)
+                ?
+                (<div className="cards-container" cards={props.cards}>
+                    {props.cards.map(({ ...card }) =>
                         <Card
 
-                            onCardLike={props.handleCardDelete}
+                            handleCardDelete={props.handleCardDelete}
                             card={card}
-                            // key={card.id}
+                            key={card.id}
+                            // isLiked={true}
+                            // setIsLiked={props.setIsLiked}
                             {...card}
                         />
                     )}
 
-                    {(searchedSavedMovies.length === 0) ? <p>Ничего не найдено</p> : <></>}
+                </div>)
+                :
+                <div className="cards-container" >
+                    {props.searchedSavedMovies.map(({ ...card }) =>
+                        <Card
+
+                            handleCardDelete={props.handleCardDelete}
+                            card={card}
+                            savedCards={props.savedCards}
+                            key={card.id}
+                            // isLiked={true}
+                            // setIsLiked={props.setIsLiked}
+                            {...card}
+                        />
+                    )}
+
+                    {(props.searchedSavedMovies.length === 0) ? <p>Ничего не найдено</p> : <></>}
                 </div>
             }
         </>
