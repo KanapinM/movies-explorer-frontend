@@ -4,25 +4,15 @@ import Card from '../Card/Card';
 import Preloader from '../Preloader/Preloader';
 import mainApi from '../../utils/MainApi';
 
-
 function SavedMovies(props) {
     const [toggle, setToggle] = React.useState(false);
     const [showPreloader, setShowPreloader] = React.useState(true);
 
-    console.log(props.cards);
-
     React.useEffect(() => {
         props.setSearchedSavedMovies(false);
-        // if (props.cards === undefined) {
-        //     setShowPreloader(true);
-        //     return;
-        // }
 
-        // props.setSavedCards(props.cards);
         setShowPreloader(false);
     }, [])
-
-
 
     async function search(req) {
         try {
@@ -60,12 +50,8 @@ function SavedMovies(props) {
                 (<div className="cards-container" cards={props.cards}>
                     {props.cards.map(({ ...card }) =>
                         <Card
-
                             handleCardDelete={props.handleCardDelete}
                             card={card}
-                            key={card.id}
-                            // isLiked={true}
-                            // setIsLiked={props.setIsLiked}
                             {...card}
                         />
                     )}
@@ -75,13 +61,9 @@ function SavedMovies(props) {
                 <div className="cards-container" >
                     {props.searchedSavedMovies.map(({ ...card }) =>
                         <Card
-
                             handleCardDelete={props.handleCardDelete}
                             card={card}
                             savedCards={props.savedCards}
-                            key={card.id}
-                            // isLiked={true}
-                            // setIsLiked={props.setIsLiked}
                             {...card}
                         />
                     )}

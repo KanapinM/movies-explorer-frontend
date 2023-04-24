@@ -3,10 +3,8 @@ import SearchForm from '../SearchForm/SearchForm';
 import Card from '../Card/Card';
 import Preloader from '../Preloader/Preloader';
 
-
 function Movies(props) {
     const [toggle, setToggle] = React.useState(props.checked || false);
-
     const [showPreloader, setShowPreloader] = React.useState(true);
 
     let searchedMovies = JSON.parse(localStorage.getItem('searchedMovies'));
@@ -15,7 +13,6 @@ function Movies(props) {
         setShowPreloader(false)
 
     }, [searchedMovies, toggle])
-
 
     async function search(req) {
         localStorage.setItem('lastMoviesSearch', JSON.stringify(req));
@@ -54,10 +51,7 @@ function Movies(props) {
                     <Card
                         handleCardLike={props.handleCardLike}
                         card={card}
-                        key={card.id}
                         savedCards={props.savedCards}
-                        // isLiked={props.isLiked}
-                        // setIsLiked={props.setIsLiked}
                         {...card}
                     />
                 )}

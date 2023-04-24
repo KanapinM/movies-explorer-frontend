@@ -21,7 +21,6 @@ import ImagePopup from '../components/Popup/ImagePopup/ImagePopup';
 import EditProfilePopup from '../components/EditProfilePopup/EditProfilePopup'
 import Notfound from '../components/Notfound/Notfound';
 
-
 function App() {
   const history = useHistory();
   const [isEditProfilePopupOpen, setIsEditProfilePopupOpen] = React.useState(false);
@@ -35,8 +34,7 @@ function App() {
   const [isInfoTooltipOpen, setInfoTooltipOpen] = React.useState(false);
   const [email, setEmail] = React.useState('');
   const [isSuccessTooltipStatus, setTooltipStatus] = React.useState(false);
-  // const [isLiked, setIsLiked] = React.useState();
-
+  const [searchedSavedMovies, setSearchedSavedMovies] = React.useState(false);
 
   React.useEffect(() => {
     checkToken();
@@ -48,17 +46,11 @@ function App() {
     }
   }, [])
 
-  const [searchedSavedMovies, setSearchedSavedMovies] = React.useState(false);
-
-
-
-
   React.useEffect(() => {
     if (loggedIn) {
       moviesApi.getInitialMovies()
         .then((cards) => {
           setCards(cards);
-
         })
         .catch((err) => {
           console.log(err);
@@ -83,24 +75,6 @@ function App() {
     }
   }, [loggedIn])
 
-
-  // React.useEffect(() => {
-  //   mainApi.getSavedMovies()
-  //     .then((res) => {
-
-  //       setSavedCards(res);
-  //       console.log(res);
-  //       console.log(savedCards);
-
-  //     })
-  //     .catch((err) => {
-  //       console.log(err);
-  //       openTooltip(false);
-  //     });
-  // }, [])
-
-
-
   const location = useLocation();
   const showHeader = ['/movies', '/saved-movies', '/', '/profile'].includes(location.pathname);
   const showFooter = ['/movies', '/saved-movies', '/'].includes(location.pathname);
@@ -109,29 +83,20 @@ function App() {
     setIsEditProfilePopupOpen(true);
   }
 
-  function handleCardLike(card) {
-    console.log(card);
+  async function handleCardLike(card, isLiked) {
+    try {
+      if (!isLiked) {
+        await mainApi.remove(savedCards.find(i => i.movieId === card.id)._id)
+      } else {
+        await mainApi.addSavedMovies(card)
+      }
 
-    // setSavedCards(savedCards.filter((cards) => cards.movieId === card.movieId));
-
-    mainApi.getSavedMovies()
-      .then((res) => {
-        console.log(res);
-
-        // if (savedCards.filter((cards) => cards.movieId !== card.movieId)) {
-        // console.log(123);
-        setSavedCards(res);
-        setCard(card);
-        // }
-
-        // setSavedCards(res.filter((cards) => cards.id === card.movieId));
-        console.log(savedCards);
-      })
-      .catch((err) => {
-        console.log(err);
-        openTooltip(false);
-      });
-
+      const savedMovies = await mainApi.getSavedMovies();
+      setSavedCards(savedMovies);
+    } catch (err) {
+      console.log(err);
+      openTooltip(false);
+    }
   }
 
   function handleUpdateUser(dataUser) {
@@ -214,14 +179,9 @@ function App() {
   }
 
   function handleCardDelete(card) {
-    console.log(card);
-    console.log('карточка удалена');
     mainApi
       .remove(card._id)
       .then(() => {
-        console.log('тут');
-
-        console.log(searchedSavedMovies);
         setSavedCards(savedCards.filter((cards) => cards.movieId !== card.movieId));
 
         if (searchedSavedMovies !== false) {
@@ -238,7 +198,6 @@ function App() {
     setInfoTooltipOpen(true);
     setTooltipStatus(boolean);
   };
-
 
   const closeAllPopups = () => {
     setIsEditProfilePopupOpen(false);
@@ -266,10 +225,7 @@ function App() {
             cards={cards}
             card={card}
             savedCards={savedCards}
-
             handleCardLike={handleCardLike}
-          // isLiked={isLiked}
-          // setIsLiked={setIsLiked}
           />
           <ProtectedRoute
             exact
@@ -277,14 +233,10 @@ function App() {
             component={SavedMovies}
             loggedIn={loggedIn}
             cards={savedCards}
-
             handleCardDelete={handleCardDelete}
-
             searchedSavedMovies={searchedSavedMovies}
             setSearchedSavedMovies={setSearchedSavedMovies}
             card={card}
-          // isLiked={isLiked}
-          // setIsLiked={setIsLiked}
           />
           <ProtectedRoute
             path="/profile"
@@ -293,9 +245,7 @@ function App() {
             email={email}
             onEditProfile={handleEditProfileClick}
             onQuit={onQuit}
-
           />
-
 
           <Route
             exact path="/"

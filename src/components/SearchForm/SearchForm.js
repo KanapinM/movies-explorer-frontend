@@ -44,7 +44,6 @@ function SearchForm({
 
     function handleSubmit(e) {
         e.preventDefault();
-        console.log(searchedValue);
         if (input === '') {
             setEmptyForm(true);
             return;

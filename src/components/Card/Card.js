@@ -2,24 +2,14 @@ import React from 'react';
 import mainApi from '../../utils/MainApi';
 import { useLocation } from 'react-router-dom';
 
-
-
 function Card({ card, handleCardLike, handleCardDelete, savedCards }) {
 
-    const [isLiked, setIsLiked] = React.useState(false);
-
-
-    React.useEffect(() => {
-        timeDuration();
-        if (savedCards) {
-            if (savedCards.find(i => i.movieId === card.id)) {
-                setIsLiked(true);
-                return;
-            };
-            setIsLiked(false);
-        }
-    }, [timeDuration, savedCards]);
     const [duration, setDuratiion] = React.useState('');
+
+    const isLiked = React.useMemo(() => {
+        timeDuration();
+        return !!savedCards?.some((i) => i.movieId === card.id);
+    }, [savedCards, card])
 
     const location = useLocation();
     const locationMovies = ['/movies'].includes(location.pathname);
@@ -37,34 +27,7 @@ function Card({ card, handleCardLike, handleCardDelete, savedCards }) {
     );
 
     function handleLike() {
-
-        if (isLiked) {
-
-            mainApi
-                .remove(savedCards.find(i => i.movieId === card.id)._id)
-                // .then(setIsLiked(false))
-                .catch((err) => {
-                    console.log(err);
-                    alert(err);
-                });
-
-            console.log(card);
-
-            console.log('карточка удалена');
-            console.log(savedCards);
-            handleCardLike(card);
-            return;
-        }
-        console.log('добавлена карточка');
-
-        mainApi
-            .addSavedMovies(card)
-            // .then(setIsLiked(true))
-            .catch((err) => {
-                console.log(err);
-                alert(err);
-            });
-        handleCardLike(card);
+        handleCardLike(card, !isLiked);
     }
 
     function handleDelete() {
