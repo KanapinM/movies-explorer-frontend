@@ -8,13 +8,14 @@ function SearchForm({
     toggle,
 }) {
     let lastMoviesSearch = JSON.parse(localStorage.getItem('lastMoviesSearch'));
+    let isShortFilms = localStorage.getItem('isShortFilms');
     const location = useLocation();
     const locationMovies = ['/movies'].includes(location.pathname);
-
     const [еmptyForm, setEmptyForm] = React.useState(false);
-    const [checked, setChecked] = React.useState();
+    const [checked, setChecked] = React.useState(handleSetToggle());
     const [input, setInput] = React.useState('');
     const [searchedValue, setSearchedValue] = React.useState(lastMoviesSearch);
+
     React.useEffect(() => {
         if (input === '') {
             setEmptyForm(true);
@@ -22,23 +23,33 @@ function SearchForm({
             setEmptyForm(false);
         }
     }, [input]);
+
     React.useEffect(() => {
         setEmptyForm(false);
-
         setInput(searchedValue || input);
         if (!locationMovies) {
             setInput(input);
         }
     }, [input, checked]);
 
+    function handleSetToggle() {
+        if (!locationMovies) {
+            return false;
+        }
+
+        return (isShortFilms === null) ? false : true;
+    }
+
     function handleSwitchClick() {
         if (checked === false) {
             setChecked(true);
-            toggle(checked);
+            toggle(!checked);
+
             return checked;
         }
         setChecked(false);
-        toggle(checked);
+        toggle(!checked);
+
         return checked;
     }
 
@@ -50,7 +61,6 @@ function SearchForm({
         }
 
         onSubmit(input);
-
     }
 
     function handleChange(e) {
@@ -85,7 +95,7 @@ function SearchForm({
                 <div className='search__container'>
                     <p className="search__shortfilms">Короткометражки</p>
                     <label className="switch">
-                        <input type="checkbox" onChange={handleSwitchClick} className="switch__input" />
+                        <input type="checkbox" onChange={handleSwitchClick} checked={checked} className="switch__input" />
                         <span className="switch__slider"></span>
                     </label>
                 </div>

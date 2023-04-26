@@ -4,15 +4,19 @@ import Card from '../Card/Card';
 import Preloader from '../Preloader/Preloader';
 
 function Movies(props) {
-    const [toggle, setToggle] = React.useState(props.checked || false);
-    const [showPreloader, setShowPreloader] = React.useState(true);
-
     let searchedMovies = JSON.parse(localStorage.getItem('searchedMovies'));
+    let isShortFilms = localStorage.getItem('isShortFilms');
+    const [toggle, setToggle] = React.useState(handleSetToggle());
+    const [showPreloader, setShowPreloader] = React.useState(true);
 
     React.useEffect(() => {
         setShowPreloader(false)
 
     }, [searchedMovies, toggle])
+
+    function handleSetToggle() {
+        return (isShortFilms === null) ? false : true;
+    }
 
     async function search(req) {
         localStorage.setItem('lastMoviesSearch', JSON.stringify(req));
@@ -20,18 +24,20 @@ function Movies(props) {
         try {
             let listMovies = props.cards.filter((movie) => {
                 setShowPreloader(true)
-                if (toggle !== false) {
+                if (toggle !== (false || null)) {
                     if (movie.duration < 40) {
                         setToggle(true);
+                        localStorage.setItem('isShortFilms', true);
+
                         return movie.nameRU.toLowerCase().includes(req.toLowerCase());
                     }
                 }
                 if (toggle === false) {
                     setToggle(false);
+                    localStorage.removeItem('isShortFilms');
 
                     return movie.nameRU.toLowerCase().includes(req.toLowerCase());
                 }
-
             });
 
             localStorage.setItem('searchedMovies', JSON.stringify(listMovies));
