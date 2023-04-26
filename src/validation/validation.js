@@ -1,11 +1,12 @@
 import React from 'react';
 import { CurrentUserContext } from '../contexts/CurrentUserContext';
 import { useLocation } from 'react-router-dom';
-
+import { isEmail } from 'validator';
 
 export function useFormWithValidation() {
     const [values, setValues] = React.useState({});
     const [errors, setErrors] = React.useState({});
+    const [validEmail, setValidEmail] = React.useState(false);
     const [isValid, setIsValid] = React.useState(false);
     const currentUser = React.useContext(CurrentUserContext);
     const location = useLocation();
@@ -17,11 +18,21 @@ export function useFormWithValidation() {
         setErrors({ ...errors, [name]: event.target.validationMessage });
 
         setIsValid(event.target.closest('form').checkValidity());
+
+        if ((event.target.name === 'email')) {
+            setErrors({ ...errors, [name]: (!isEmail(value)) ? (event.target.validationMessage || 'Некорректный Email') : '' });
+            setValidEmail(isEmail(value));
+            setIsValid(isEmail(value) && event.target.closest('form').checkValidity());
+        }
     };
+
     React.useEffect(() => {
+
         if ((locationProfile) && (((values.name === currentUser.name) && (values.email === currentUser.email)))) {
             setIsValid(false);
-            return;
+        }
+        if (!validEmail) {
+            setIsValid(false);
         }
     }, [handleChange]);
 
