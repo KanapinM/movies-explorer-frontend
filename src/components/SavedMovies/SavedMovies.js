@@ -7,6 +7,7 @@ import mainApi from '../../utils/MainApi';
 function SavedMovies(props) {
     const [toggle, setToggle] = React.useState(false);
     const [showPreloader, setShowPreloader] = React.useState(true);
+    const [searchedError, setSearchedError] = React.useState(false);
 
     React.useEffect(() => {
         props.setSearchedSavedMovies(false);
@@ -20,7 +21,6 @@ function SavedMovies(props) {
                 setShowPreloader(true)
                 if (toggle !== false) {
                     setToggle(true);
-
                     if (movie.duration < 40) {
                         return movie.nameRU.toLowerCase().includes(req.toLowerCase());
                     }
@@ -34,17 +34,20 @@ function SavedMovies(props) {
 
             props.setSearchedSavedMovies(listMovies);
             setShowPreloader(false);
+
             return
         } catch (err) {
             console.log(err);
+            setSearchedError(true);
+            alert(err);
         }
     }
 
     return (
         <>
 
-            <SearchForm onSubmit={search} toggle={setToggle} setShowPreloader={setShowPreloader} />
-            {showPreloader ? <Preloader /> : <></>}
+            <SearchForm onSubmit={search} toggle={setToggle} setShowPreloader={setShowPreloader} searchedError={searchedError} />
+            {showPreloader && <Preloader />}
             {(props.searchedSavedMovies === false || undefined || null)
                 ?
                 (<div className="cards-container" cards={props.cards}>
@@ -55,7 +58,6 @@ function SavedMovies(props) {
                             {...card}
                         />
                     )}
-
                 </div>)
                 :
                 <div className="cards-container" >
@@ -68,7 +70,7 @@ function SavedMovies(props) {
                         />
                     )}
 
-                    {(props.searchedSavedMovies.length === 0) ? <p>Ничего не найдено</p> : <></>}
+                    {(props.searchedSavedMovies.length === 0) && <p>Ничего не найдено</p>}
                 </div>
             }
         </>

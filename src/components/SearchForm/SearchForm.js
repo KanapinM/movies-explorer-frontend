@@ -6,6 +6,7 @@ import { useLocation } from 'react-router-dom';
 function SearchForm({
     onSubmit,
     toggle,
+    searchedError
 }) {
     let lastMoviesSearch = JSON.parse(localStorage.getItem('lastMoviesSearch'));
     let isShortFilms = localStorage.getItem('isShortFilms');
@@ -100,7 +101,13 @@ function SearchForm({
                     </label>
                 </div>
             </div>
-            {еmptyForm ? <p className="search-error">Нужно ввести ключевое слово</p> : <></>}
+            {еmptyForm && <p className="search-error">Нужно ввести ключевое слово</p>}
+            {searchedError &&
+                <p className="search-error">
+                    Во время запроса произошла ошибка. Возможно, проблема с соединением или сервер недоступен.
+                    Подождите немного и попробуйте ещё раз.
+                </p>}
+
         </form>
     )
 }

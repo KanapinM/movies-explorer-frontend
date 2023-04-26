@@ -8,7 +8,7 @@ function Movies(props) {
     let isShortFilms = localStorage.getItem('isShortFilms');
     const [toggle, setToggle] = React.useState(handleSetToggle());
     const [showPreloader, setShowPreloader] = React.useState(true);
-
+    const [searchedError, setSearchedError] = React.useState(false);
     React.useEffect(() => {
         setShowPreloader(false)
 
@@ -20,7 +20,6 @@ function Movies(props) {
 
     async function search(req) {
         localStorage.setItem('lastMoviesSearch', JSON.stringify(req));
-
         try {
             let listMovies = props.cards.filter((movie) => {
                 setShowPreloader(true)
@@ -44,14 +43,15 @@ function Movies(props) {
 
         } catch (err) {
             console.log(err);
+            setSearchedError(true);
             alert(err);
         }
     }
 
     return (
         <>
-            <SearchForm onSubmit={search} toggle={setToggle} setShowPreloader={setShowPreloader} />
-            {showPreloader ? <Preloader /> : <></>}
+            <SearchForm onSubmit={search} toggle={setToggle} setShowPreloader={setShowPreloader} searchedError={searchedError} />
+            {showPreloader && <Preloader />}
             {(searchedMovies === null) ? <></> : <div className="cards-container" cards={props.cards}>
                 {searchedMovies.map(({ ...card }) =>
                     <Card
@@ -62,7 +62,7 @@ function Movies(props) {
                     />
                 )}
 
-                {(searchedMovies.length === 0) ? <p>Ничего не найдено</p> : <></>}
+                {(searchedMovies.length === 0) && <p>Ничего не найдено</p>}
             </div>
             }
             <button className="more-button">Ещё</button>

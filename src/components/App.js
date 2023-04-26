@@ -206,7 +206,7 @@ function App() {
 
   return (
     <CurrentUserContext.Provider value={currentUser}>
-      {showHeader ? <Header loggedIn={loggedIn} /> : <></>}
+      {showHeader && <Header loggedIn={loggedIn} />}
       <main>
         <Switch>
           <Route loggedIn={loggedIn} path="/signup">
@@ -259,7 +259,7 @@ function App() {
         </Switch>
       </main>
 
-      {showFooter ? <Footer /> : <></>}
+      {showFooter && <Footer />}
 
       <EditProfilePopup
         isEditProfilePopupOpen={isEditProfilePopupOpen}
