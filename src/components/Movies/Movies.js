@@ -1,28 +1,65 @@
 import React from 'react';
+import useResize from 'use-resize';
 import SearchForm from '../SearchForm/SearchForm';
 import Card from '../Card/Card';
 import Preloader from '../Preloader/Preloader';
 
 function Movies(props) {
+    const size = useResize();
+    const [moreButton, setMoreButton] = React.useState(false);
+    const [findedMovies, setFindedMovies] = React.useState({});
+    const [step, setStep] = React.useState(0);
+    const [numberOfFirstMovies, setNumberOfFirstMovies] = React.useState(0);
+    const [showMovies, setShowMovies] = React.useState([]);
+    const [paginator, setPaginator] = React.useState();
+
     let searchedMovies = JSON.parse(localStorage.getItem('searchedMovies'));
     let isShortFilms = localStorage.getItem('isShortFilms');
     const [toggle, setToggle] = React.useState(handleSetToggle());
     const [showPreloader, setShowPreloader] = React.useState(true);
     const [searchedError, setSearchedError] = React.useState(false);
+
+    React.useEffect(() => {
+        if (searchedMovies !== null) {
+            setFindedMovies(searchedMovies);
+        }
+    }, []);
+
     React.useEffect(() => {
         setShowPreloader(false)
+        showFirstMovies();
+    }, [findedMovies]);
 
-    }, [searchedMovies, toggle])
+    React.useEffect(() => {
+        setMoreButton(paginator < findedMovies.length);
+    }, [showMovies]);
 
     function handleSetToggle() {
         return (isShortFilms === null) ? false : true;
     }
 
+    function showFirstMovies() {
+        setNumberOfFirstMovies(size.width > 1279 ? 16 : size.width > 954 ? 12 : size.width > 768 ? 8 : 5);
+
+        setPaginator(numberOfFirstMovies);
+        setShowMovies(Array.from(findedMovies).slice(0, numberOfFirstMovies));
+    }
+
+    function showMoreMovies() {
+        setStep(size.width > 1279 ? 4 : size.width > 954 ? 3 : 2);
+
+        let nextStepArr = Array.from(findedMovies).splice(paginator, step);
+        setShowMovies(showMovies.concat(nextStepArr));
+        setPaginator(paginator + step);
+    }
+
     async function search(req) {
         localStorage.setItem('lastMoviesSearch', JSON.stringify(req));
+        console.log(req);
         try {
             let listMovies = props.cards.filter((movie) => {
                 setShowPreloader(true)
+
                 if (toggle !== (false || null)) {
                     if (movie.duration < 40) {
                         setToggle(true);
@@ -40,6 +77,7 @@ function Movies(props) {
             });
 
             localStorage.setItem('searchedMovies', JSON.stringify(listMovies));
+            setFindedMovies(listMovies);
 
         } catch (err) {
             console.log(err);
@@ -53,7 +91,7 @@ function Movies(props) {
             <SearchForm onSubmit={search} toggle={setToggle} setShowPreloader={setShowPreloader} searchedError={searchedError} />
             {showPreloader && <Preloader />}
             {(searchedMovies === null) ? <></> : <div className="cards-container" cards={props.cards}>
-                {searchedMovies.map(({ ...card }) =>
+                {showMovies.map(({ ...card }) =>
                     <Card
                         handleCardLike={props.handleCardLike}
                         card={card}
@@ -65,7 +103,7 @@ function Movies(props) {
                 {(searchedMovies.length === 0) && <p>Ничего не найдено</p>}
             </div>
             }
-            <button className="more-button">Ещё</button>
+            {moreButton && <button className="more-button" onClick={showMoreMovies}>Ещё</button>}
         </>
     );
 }
