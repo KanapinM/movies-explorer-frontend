@@ -27,13 +27,14 @@ export function useFormWithValidation() {
     };
 
     React.useEffect(() => {
+        if ((locationProfile) && (values.email === currentUser.email)) {
+            if (values.name === currentUser.name) {
+                setIsValid(false);
+            } else { setIsValid(true) }
+        } else if (!validEmail) {
+            setIsValid(false);
+        }
 
-        if ((locationProfile) && (((values.name === currentUser.name) && (values.email === currentUser.email)))) {
-            setIsValid(false);
-        }
-        if (!validEmail) {
-            setIsValid(false);
-        }
     }, [handleChange]);
 
     const resetForm = React.useCallback(
