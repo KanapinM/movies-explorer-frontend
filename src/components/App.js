@@ -105,6 +105,7 @@ function App() {
       .then((res) => {
         setCurrentUser(res);
         closeAllPopups();
+        openTooltip(true);
       })
       .catch((err) => {
         console.log(err);
