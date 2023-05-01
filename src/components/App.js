@@ -25,7 +25,8 @@ function App() {
   const history = useHistory();
   const [isEditProfilePopupOpen, setIsEditProfilePopupOpen] = React.useState(false);
   const [currentUser, setCurrentUser] = React.useState({ email: '', name: '' });
-  const [loggedIn, setLoggedIn] = React.useState((document.cookie !== 'undefind' || '') ? true : false);
+  // const [loggedIn, setLoggedIn] = React.useState((document.cookie !== 'undefind' || '') ? true : false);
+  const [loggedIn, setLoggedIn] = React.useState(true);
 
   const [cards, setCards] = React.useState([]);
   const [card, setCard] = React.useState({});
@@ -37,7 +38,9 @@ function App() {
   const [searchedSavedMovies, setSearchedSavedMovies] = React.useState(false);
 
   React.useEffect(() => {
-    checkToken();
+    if (!document.cookie) {
+      setLoggedIn(false);
+    }
   }, []);
 
   React.useEffect(() => {
@@ -138,6 +141,7 @@ function App() {
         if (data) {
           setEmail(email);
           setLoggedIn(true);
+          setCurrentUser({ email: email, name: password });
           openTooltip(true);
           history.push('/movies');
         }
@@ -151,7 +155,7 @@ function App() {
   function onQuit() {
     localStorage.clear();
     console.log('вы вышли');
-    document.cookie = 'undefind';
+    setCurrentUser({ email: '', name: '' });
     setLoggedIn(false);
 
     mainApi
@@ -160,23 +164,6 @@ function App() {
         console.log(err);
         openTooltip(false);
       });
-  }
-
-  function checkToken() {
-    if (document.cookie !== 'undefind' || '') {
-      return mainApi
-        .checkToken()
-        .then((res) => {
-          if (res) {
-            setLoggedIn(true);
-            setEmail(res.email);
-          }
-        })
-        .catch((err) => {
-          console.log(err);
-          openTooltip(false);
-        });
-    }
   }
 
   function handleCardDelete(card) {
