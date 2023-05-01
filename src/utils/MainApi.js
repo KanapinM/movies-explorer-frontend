@@ -59,7 +59,7 @@ class MainApi {
                 return this._response(res);
             })
             .then((data) => {
-                document.cookie = data.token;
+                // document.cookie = data.token;
                 return data;
             })
     }

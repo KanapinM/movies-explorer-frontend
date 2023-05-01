@@ -25,8 +25,7 @@ function App() {
   const history = useHistory();
   const [isEditProfilePopupOpen, setIsEditProfilePopupOpen] = React.useState(false);
   const [currentUser, setCurrentUser] = React.useState({ email: '', name: '' });
-  // const [loggedIn, setLoggedIn] = React.useState((document.cookie !== 'undefind' || '') ? true : false);
-  const [loggedIn, setLoggedIn] = React.useState(true);
+  const [loggedIn, setLoggedIn] = React.useState();
 
   const [cards, setCards] = React.useState([]);
   const [card, setCard] = React.useState({});
@@ -38,7 +37,9 @@ function App() {
   const [searchedSavedMovies, setSearchedSavedMovies] = React.useState(false);
 
   React.useEffect(() => {
-    if (!document.cookie) {
+    if (document.cookie) {
+      setLoggedIn(true);
+    } else {
       setLoggedIn(false);
     }
   }, []);
