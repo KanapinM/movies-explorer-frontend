@@ -25,7 +25,7 @@ function App() {
   const history = useHistory();
   const [isEditProfilePopupOpen, setIsEditProfilePopupOpen] = React.useState(false);
   const [currentUser, setCurrentUser] = React.useState({ email: '', name: '' });
-  const [loggedIn, setLoggedIn] = React.useState();
+  const [loggedIn, setLoggedIn] = React.useState(localStorage.getItem('logged'));
 
   const [cards, setCards] = React.useState([]);
   const [card, setCard] = React.useState({});
@@ -35,14 +35,6 @@ function App() {
   const [email, setEmail] = React.useState('');
   const [isSuccessTooltipStatus, setTooltipStatus] = React.useState(false);
   const [searchedSavedMovies, setSearchedSavedMovies] = React.useState(false);
-
-  React.useEffect(() => {
-    if (document.cookie) {
-      setLoggedIn(true);
-    } else {
-      setLoggedIn(false);
-    }
-  }, []);
 
   React.useEffect(() => {
     if (loggedIn && (location.pathname === '/signup' || location.pathname === '/signin')) {
@@ -107,6 +99,7 @@ function App() {
     mainApi
       .editUserData(dataUser)
       .then((res) => {
+        console.log(res);
         setCurrentUser(res);
         closeAllPopups();
         openTooltip(true);
@@ -123,41 +116,39 @@ function App() {
       .then((data) => {
         if (data.token) {
           setEmail(email);
-
+          console.log(data);
           setLoggedIn(true);
+          localStorage.setItem('logged', JSON.stringify(true));
           history.push('/movies');
-          return data;
         }
       })
       .catch((err) => {
         console.log(err);
+        localStorage.removeItem('logged');
+        setLoggedIn(false);
         openTooltip(false);
       });
   }
 
-  function handleRegister(email, password, name) {
+  function handleRegister(name, email, password) {
     mainApi
-      .signup(email, password, name)
-      .then((data) => {
-        if (data) {
-          setEmail(email);
-          setLoggedIn(true);
-          setCurrentUser({ email: email, name: password });
-          openTooltip(true);
-          history.push('/movies');
-        }
+      .signup(name, email, password)
+      .then(() => {
+        handleLogin(email, password);
       })
       .catch((err) => {
         console.log(err);
+        localStorage.removeItem('logged');
+        setLoggedIn(false);
         openTooltip(false);
       });
   }
 
   function onQuit() {
-    localStorage.clear();
     console.log('вы вышли');
     setCurrentUser({ email: '', name: '' });
     setLoggedIn(false);
+    localStorage.clear();
 
     mainApi
       .logout()
