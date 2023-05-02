@@ -3,6 +3,7 @@ import useResize from 'use-resize';
 import SearchForm from '../SearchForm/SearchForm';
 import Card from '../Card/Card';
 import Preloader from '../Preloader/Preloader';
+import { shortMovieDuration, firstMovies, nextStep } from '../../utils/constants';
 
 function Movies(props) {
     const size = useResize();
@@ -39,14 +40,14 @@ function Movies(props) {
     }
 
     function showFirstMovies() {
-        setNumberOfFirstMovies(size.width > 1279 ? 16 : size.width > 954 ? 12 : size.width > 768 ? 8 : 5);
+        setNumberOfFirstMovies(size.width > 1279 ? firstMovies.large : size.width > 954 ? firstMovies.medium : size.width > 768 ? firstMovies.small : firstMovies.smallest);
 
         setPaginator(numberOfFirstMovies);
         setShowMovies(Array.from(findedMovies).slice(0, numberOfFirstMovies));
     }
 
     function showMoreMovies() {
-        setStep(size.width > 1279 ? 4 : size.width > 954 ? 3 : 2);
+        setStep(size.width > 1279 ? nextStep.large : size.width > 954 ? nextStep.medium : nextStep.small);
 
         let nextStepArr = Array.from(findedMovies).splice(paginator, step);
         setShowMovies(showMovies.concat(nextStepArr));
@@ -55,13 +56,12 @@ function Movies(props) {
 
     async function search(req) {
         localStorage.setItem('lastMoviesSearch', JSON.stringify(req));
-        console.log(req);
         try {
             let listMovies = props.cards.filter((movie) => {
                 setShowPreloader(true)
 
                 if (toggle !== (false || null)) {
-                    if (movie.duration < 40) {
+                    if (movie.duration < shortMovieDuration) {
                         setToggle(true);
                         localStorage.setItem('isShortFilms', true);
 

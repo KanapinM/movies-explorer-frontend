@@ -2,7 +2,7 @@ import React from 'react';
 import SearchForm from '../SearchForm/SearchForm';
 import Card from '../Card/Card';
 import Preloader from '../Preloader/Preloader';
-import mainApi from '../../utils/MainApi';
+import { shortMovieDuration } from '../../utils/constants';
 
 function SavedMovies(props) {
     const [toggle, setToggle] = React.useState(false);
@@ -21,7 +21,7 @@ function SavedMovies(props) {
                 setShowPreloader(true)
                 if (toggle !== false) {
                     setToggle(true);
-                    if (movie.duration < 40) {
+                    if (movie.duration < shortMovieDuration) {
                         return movie.nameRU.toLowerCase().includes(req.toLowerCase());
                     }
                 }
