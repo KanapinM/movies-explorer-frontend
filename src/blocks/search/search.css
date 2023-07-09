@@ -32,3 +32,28 @@
         width: 92.1%;
     }
 }
+
+.search-error {
+    margin: 25px auto 0;
+    color: red;
+    max-width: 1140px;
+    width: 89.06%;
+}
+
+@media screen and (max-width: 1279px) {
+    .search-error {
+        width: 89.06%;
+    }
+}
+
+@media screen and (max-width: 768px) {
+    .search-error {
+        width: 92.2%;
+    }
+}
+
+@media screen and (max-width: 320px) {
+    .search-error {
+        width: 92.1%;
+    }
+}

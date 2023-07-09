@@ -3,8 +3,8 @@ import { Switch, Route, useHistory, useLocation } from 'react-router-dom';
 
 import { CurrentUserContext } from '../contexts/CurrentUserContext';
 
-import api from '../utils/Api';
-import auth from '../utils/Auth';
+import moviesApi from '../utils/MoviesApi';
+import mainApi from '../utils/MainApi';
 
 import ProtectedRoute from '../components/ProtectedRoute/ProtectedRoute';
 import Login from '../components/Login/Login';
@@ -21,74 +21,88 @@ import ImagePopup from '../components/Popup/ImagePopup/ImagePopup';
 import EditProfilePopup from '../components/EditProfilePopup/EditProfilePopup'
 import Notfound from '../components/Notfound/Notfound';
 
-
 function App() {
   const history = useHistory();
   const [isEditProfilePopupOpen, setIsEditProfilePopupOpen] = React.useState(false);
-  const [selectedCard, setSelectedCard] = React.useState(null);
-  const [currentUser, setCurrentUser] = React.useState(null);
-  const [loggedIn, setLoggedIn] = React.useState(false);
+  const [currentUser, setCurrentUser] = React.useState({ email: '', name: '' });
+  const [loggedIn, setLoggedIn] = React.useState(localStorage.getItem('logged'));
+
   const [cards, setCards] = React.useState([]);
+  const [card, setCard] = React.useState({});
+  const [savedCards, setSavedCards] = React.useState([]);
+
   const [isInfoTooltipOpen, setInfoTooltipOpen] = React.useState(false);
   const [email, setEmail] = React.useState('');
   const [isSuccessTooltipStatus, setTooltipStatus] = React.useState(false);
+  const [searchedSavedMovies, setSearchedSavedMovies] = React.useState(false);
 
   React.useEffect(() => {
-    checkToken();
-  }, []);
+    if (loggedIn && (location.pathname === '/signup' || location.pathname === '/signin')) {
+      history.push('/');
+    }
+  }, [])
+
   React.useEffect(() => {
     if (loggedIn) {
-      Promise.all([api.getUserData(), api.getInitialCards()])
-        .then(([user, cards]) => {
-          setCurrentUser(user);
+      moviesApi.getInitialMovies()
+        .then((cards) => {
           setCards(cards);
         })
-        .catch((err) => console.log(err))
+        .catch((err) => {
+          console.log(err);
+          openTooltip(false);
+        });
     }
   }, [loggedIn])
+
+  React.useEffect(() => {
+    if (loggedIn) {
+      Promise.all([mainApi.getUserData(), mainApi.getSavedMovies()])
+        .then(([user, userCards]) => {
+          setLoggedIn(true);
+          setCurrentUser(user);
+
+          setSavedCards(userCards);
+        })
+        .catch((err) => {
+          console.log(err);
+          openTooltip(false);
+        });
+    }
+  }, [loggedIn])
+
   const location = useLocation();
-  const hiddenHeader = ['/signup', '/signin', '/notfound'].includes(location.pathname);
-  const hiddenFooter = ['/signup', '/signin', '/profile', '/notfound'].includes(location.pathname);
+  const showHeader = ['/movies', '/saved-movies', '/', '/profile'].includes(location.pathname);
+  const showFooter = ['/movies', '/saved-movies', '/'].includes(location.pathname);
 
   function handleEditProfileClick() {
     setIsEditProfilePopupOpen(true);
   }
 
+  async function handleCardLike(card, isLiked) {
+    try {
+      if (!isLiked) {
+        await mainApi.remove(savedCards.find(i => i.movieId === card.id)._id)
+      } else {
+        await mainApi.addSavedMovies(card)
+      }
 
-  function handleCardClick(card) {
-    setSelectedCard(card);
-  }
-
-  function handleCardLike(card) {
-    const isLiked = card.likes.some(i => i._id === currentUser._id);
-    api
-      .changeLikeCardStatus(card._id, !isLiked)
-      .then((newCard) => {
-        setCards((state) => state.map((c) => c._id === card._id ? newCard : c));
-      })
-      .catch((err) => console.log(err))
+      const savedMovies = await mainApi.getSavedMovies();
+      setSavedCards(savedMovies);
+    } catch (err) {
+      console.log(err);
+      openTooltip(false);
+    }
   }
 
   function handleUpdateUser(dataUser) {
-    api
+    mainApi
       .editUserData(dataUser)
       .then((res) => {
+        console.log(res);
         setCurrentUser(res);
         closeAllPopups();
-      })
-      .catch((err) => console.log(err))
-  }
-
-  function handleLogin(email, password) {
-    auth
-      .signin(email, password)
-      .then((data) => {
-        if (data.token) {
-          setEmail(email);
-          setLoggedIn(true);
-          history.push('/movies');
-          return data;
-        }
+        openTooltip(true);
       })
       .catch((err) => {
         console.log(err);
@@ -96,41 +110,68 @@ function App() {
       });
   }
 
-  function handleRegister(email, password) {
-    auth
-      .signup(email, password)
+  function handleLogin(email, password) {
+    mainApi
+      .signin(email, password)
       .then((data) => {
-        if (data) {
+        if (data.token) {
           setEmail(email);
-          openTooltip(true);
-          history.push('/signin');
+          console.log(data);
+          setLoggedIn(true);
+          localStorage.setItem('logged', JSON.stringify(true));
+          history.push('/movies');
         }
       })
       .catch((err) => {
         console.log(err);
+        localStorage.removeItem('logged');
+        setLoggedIn(false);
+        openTooltip(false);
+      });
+  }
+
+  function handleRegister(name, email, password) {
+    mainApi
+      .signup(name, email, password)
+      .then(() => {
+        handleLogin(email, password);
+      })
+      .catch((err) => {
+        console.log(err);
+        localStorage.removeItem('logged');
+        setLoggedIn(false);
         openTooltip(false);
       });
   }
 
   function onQuit() {
-    localStorage.removeItem('jwt');
+    console.log('вы вышли');
+    setCurrentUser({ email: '', name: '' });
     setLoggedIn(false);
+    localStorage.clear();
+
+    mainApi
+      .logout()
+      .catch((err) => {
+        console.log(err);
+        openTooltip(false);
+      });
   }
 
-  function checkToken() {
-    const jwt = localStorage.getItem('jwt');
-    if (jwt) {
-      return auth
-        .checkToken(jwt)
-        .then((res) => {
-          if (res) {
-            setLoggedIn(true);
-            setEmail(res.data.email);
-            history.push('/');
-          }
-        })
-        .catch((err) => console.log(err));
-    }
+  function handleCardDelete(card) {
+    mainApi
+      .remove(card._id)
+      .then(() => {
+        setSavedCards(savedCards.filter((cards) => cards.movieId !== card.movieId));
+
+        if (searchedSavedMovies !== false) {
+          setSearchedSavedMovies(searchedSavedMovies.filter((cards) => cards.movieId !== card.movieId));
+        }
+      })
+      .catch((err) => {
+        console.log(err);
+        alert(err);
+      });
   }
 
   function openTooltip(boolean) {
@@ -138,27 +179,22 @@ function App() {
     setTooltipStatus(boolean);
   };
 
-
   const closeAllPopups = () => {
     setIsEditProfilePopupOpen(false);
-    setSelectedCard(null);
     setInfoTooltipOpen(false);
   }
 
   return (
     <CurrentUserContext.Provider value={currentUser}>
-      {hiddenHeader ? <></> : <Header />}
+      {showHeader && <Header loggedIn={loggedIn} />}
       <main>
         <Switch>
-          <Route path="/signup">
-            <Register auth={auth} onSubmit={handleRegister} />
+          <Route loggedIn={loggedIn} path="/signup">
+            <Register onSubmit={handleRegister} />
           </Route>
 
-          <Route path="/signin">
-            <Login auth={auth} onSubmit={handleLogin} />
-          </Route>
-          <Route path="/notfound">
-            <Notfound />
+          <Route loggedIn={loggedIn} path="/signin">
+            <Login onSubmit={handleLogin} />
           </Route>
 
           <ProtectedRoute
@@ -167,17 +203,20 @@ function App() {
             component={Movies}
             loggedIn={loggedIn}
             cards={cards}
-            onCardClick={handleCardClick}
-            onCardLike={handleCardLike}
+            card={card}
+            savedCards={savedCards}
+            handleCardLike={handleCardLike}
           />
           <ProtectedRoute
             exact
             path="/saved-movies"
             component={SavedMovies}
             loggedIn={loggedIn}
-            cards={cards}
-            onCardClick={handleCardClick}
-            onCardLike={handleCardLike}
+            cards={savedCards}
+            handleCardDelete={handleCardDelete}
+            searchedSavedMovies={searchedSavedMovies}
+            setSearchedSavedMovies={setSearchedSavedMovies}
+            card={card}
           />
           <ProtectedRoute
             path="/profile"
@@ -187,14 +226,20 @@ function App() {
             onEditProfile={handleEditProfileClick}
             onQuit={onQuit}
           />
+
           <Route
-            path="/"
+            exact path="/"
             component={Main}
           />
 
+          <Route exact path="*">
+            <Notfound />
+          </Route>
+
         </Switch>
       </main>
-      {hiddenFooter ? <></> : <Footer />}
+
+      {showFooter && <Footer />}
 
       <EditProfilePopup
         isEditProfilePopupOpen={isEditProfilePopupOpen}
@@ -202,7 +247,6 @@ function App() {
         onUpdateUser={handleUpdateUser}
       />
       <ImagePopup
-        card={selectedCard}
         onClose={closeAllPopups}
       />
       <InfoTooltip

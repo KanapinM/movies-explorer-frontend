@@ -49,7 +49,7 @@ function Navigation() {
             </nav>
 
             <div
-                isSideBarOpen={isSideBarOpen}
+                // isSideBarOpen={isSideBarOpen}
                 className={`navigation-sidebar ${isSideBarOpen ? 'navigation-sidebar_open' : ''}`} >
                 <nav className='navigation-sidebar__menu'>
                     <button
@@ -60,6 +60,7 @@ function Navigation() {
                     <div className='navigation-sidebar__links'>
                         <Link
                             to="/"
+                            onClick={onCloseSidebar}
                             className="navigation-sidebar__link">
                             Главная
                         </Link>

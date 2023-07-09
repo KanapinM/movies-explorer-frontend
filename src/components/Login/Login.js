@@ -1,36 +1,19 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
 import logo from '../../images/logo.svg';
+import { useFormWithValidation } from '../../validation/validation';
+
 
 function Login({ onSubmit, ...props }) {
-
-    const [userData, setUserData] = React.useState({
-        email: "",
-        password: "",
-    });
+    const { values, handleChange, errors, isValid, resetForm } = useFormWithValidation();
 
     function handleLogin(email, password) {
         onSubmit(email, password);
     };
-
-    function handleChange(e) {
-        const { name, value } = e.target;
-        setUserData({
-            ...userData,
-            [name]: value,
-        });
-    };
-
     function handleSubmit(evt) {
         evt.preventDefault();
-
-        if (!userData.password) {
-            return;
-        }
-        const { email, password } = userData;
-        handleLogin(email, password);
+        handleLogin(values.email, values.password);
     }
-
 
     return (
         <section className="user">
@@ -51,22 +34,26 @@ function Login({ onSubmit, ...props }) {
                     <label className="user__input-label" >Email</label>
                     <input
                         onChange={handleChange}
-                        className="user__input"
+                        className={`user__input ${(errors.email === '') ? '' : 'user__input_error'}`}
                         name="email"
                         type="email"
+                        value={values.email || ''}
                         required
                     />
+                    <span className='user__input-error'>{errors.email}</span>
                     <label className="user__input-label">Пароль</label>
                     <input
                         onChange={handleChange}
-                        className="user__input"
+                        className={`user__input ${(errors.password === '') ? '' : 'user__input_error'}`}
                         name="password"
                         type="password"
+                        value={values.password || ''}
                         required
                     />
+                    <span className='user__input-error'>{errors.password}</span>
                     <button
                         type="submit"
-                        className="user__submit-button user__submit-button_login">
+                        className={`user__submit-button user__submit-button_login ${isValid ? '' : 'user__submit-button_disabled'}`} disabled={!isValid}>
                         Войти
                     </button>
                     <p className="user__registered">

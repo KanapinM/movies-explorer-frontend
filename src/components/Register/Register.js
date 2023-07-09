@@ -1,35 +1,19 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
 import logo from '../../images/logo.svg';
+import { useFormWithValidation } from '../../validation/validation';
+
 
 function Register({ onSubmit }) {
+    const { values, handleChange, errors, isValid, resetForm } = useFormWithValidation();
 
-    const [userData, setUserData] = React.useState({
-        email: "",
-        password: "",
-    });
-
-    function handleRegister(email, password) {
-        onSubmit(email, password);
-    };
-
-    function handleChange(e) {
-        const { name, value } = e.target;
-        setUserData({
-            ...userData,
-            [name]: value,
-        });
+    function handleRegister(name, email, password) {
+        onSubmit(name, email, password);
     };
 
     function handleSubmit(evt) {
         evt.preventDefault();
-
-        if (!userData.password) {
-            return;
-        }
-        const { email, password } = userData;
-        handleRegister(email, password);
-
+        handleRegister(values.name, values.email, values.password);
     }
 
 
@@ -51,28 +35,38 @@ function Register({ onSubmit }) {
                     <label className="user__input-label" >Имя</label>
                     <input
                         onChange={handleChange}
-                        className="user__input"
+                        className={`user__input ${(errors.name === '') ? '' : 'user__input_error'}`}
                         name="name"
                         type="name"
+                        pattern="[a-zа-яA-ZА-ЯёЁ\-\s]+"
+                        minLength="2"
+                        maxLength="30"
+                        value={values.name || ''}
+                        required
                     />
+                    <span className='user__input-error'>{errors.name}</span>
                     <label className="user__input-label" >Email</label>
                     <input
                         onChange={handleChange}
-                        className="user__input"
+                        className={`user__input ${(errors.email === '') ? '' : 'user__input_error'}`}
                         name="email"
                         type="email"
+                        value={values.email || ''}
                         required
                     />
+                    <span className='user__input-error'>{errors.email}</span>
+
                     <label className="user__input-label" >Пароль</label>
                     <input
                         onChange={handleChange}
-                        className="user__input"
+                        className={`user__input ${(errors.password === '') ? '' : 'user__input_error'}`}
                         name="password"
                         type="password"
+                        value={values.password || ''}
                         required
                     />
-                    <p className='user__input-error'>Что-то пошло не так...</p>
-                    <button type="submit" className="user__submit-button user__submit-button_register">
+                    <span className='user__input-error'>{errors.password}</span>
+                    <button type="submit" className={`user__submit-button  user__submit-button_register  ${isValid ? '' : 'user__submit-button_disabled'}`} disabled={!isValid}>
                         Зарегистрироваться
                     </button>
                     <p className="user__registered">

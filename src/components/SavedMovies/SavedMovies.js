@@ -1,74 +1,78 @@
 import React from 'react';
 import SearchForm from '../SearchForm/SearchForm';
-// import Card from '../Card/Card';
-
+import Card from '../Card/Card';
+import Preloader from '../Preloader/Preloader';
+import { shortMovieDuration } from '../../utils/constants';
 
 function SavedMovies(props) {
-    function handleCardDelete() {
-        console.log('Обработка удаления фильма');
+    const [toggle, setToggle] = React.useState(false);
+    const [showPreloader, setShowPreloader] = React.useState(true);
+    const [searchedError, setSearchedError] = React.useState(false);
+
+    React.useEffect(() => {
+        props.setSearchedSavedMovies(false);
+
+        setShowPreloader(false);
+    }, [])
+
+    async function search(req) {
+        try {
+            let listMovies = props.cards.filter((movie) => {
+                setShowPreloader(true)
+                if (toggle !== false) {
+                    setToggle(true);
+                    if (movie.duration < shortMovieDuration) {
+                        return movie.nameRU.toLowerCase().includes(req.toLowerCase());
+                    }
+                }
+                if (toggle === false) {
+                    setToggle(false);
+                    return movie.nameRU.toLowerCase().includes(req.toLowerCase());
+                }
+
+            });
+
+            props.setSearchedSavedMovies(listMovies);
+            setShowPreloader(false);
+
+            return
+        } catch (err) {
+            console.log(err);
+            setSearchedError(true);
+            alert(err);
+        }
     }
+
     return (
         <>
-            <SearchForm />
-            <div className="cards-container">
-                <div className="card">
-                    <img
-                        className="card__photo"
-                        src="https://cdn.ananasposter.ru/image/cache/catalog/poster/games/985-1000x830.jpg"
-                        alt="mortal cobat"
-                    />
-                    <div className="card__place">
-                        <h2 className="card__tittle">mortal cobat</h2>
-                        <div className="card__container">
-                            <button
-                                onClick={handleCardDelete}
-                                type="button"
-                                className="card__delete-movie"
-                            />
-                        </div>
-                    </div>
-                    <p className='card__chrono'>1ч 42м</p>
-                </div>
 
-                <div className="card">
-                    <img
-                        className="card__photo"
-                        src="https://proprikol.ru/wp-content/uploads/2021/05/kartinki-titanik-6.jpg"
-                        alt="титаник"
-                    />
-                    <div className="card__place">
-                        <h2 className="card__tittle">Титаник</h2>
-                        <div className="card__container">
-                            <button
-                                onClick={handleCardDelete}
-                                type="button"
-                                className="card__delete-movie"
-                            />
-                        </div>
-                    </div>
-                    <p className='card__chrono'>1ч 42м</p>
-                </div>
-                <div className="card">
-                    <img
-                        className="card__photo"
-                        src="https://www.film.ru/sites/default/files/filefield_paths/watchmen.jpg"
-                        alt="хранители"
-                    />
-                    <div className="card__place">
-                        <h2 className="card__tittle">Хранители</h2>
-                        <div className="card__container">
-                            <button
-                                onClick={handleCardDelete}
-                                type="button"
-                                className="card__delete-movie"
-                            />
-                        </div>
-                    </div>
-                    <p className='card__chrono'>2ч 42м</p>
-                </div>
+            <SearchForm onSubmit={search} toggle={setToggle} setShowPreloader={setShowPreloader} searchedError={searchedError} />
+            {showPreloader && <Preloader />}
+            {(props.searchedSavedMovies === false || undefined || null)
+                ?
+                (<div className="cards-container" cards={props.cards}>
+                    {props.cards.map(({ ...card }) =>
+                        <Card
+                            handleCardDelete={props.handleCardDelete}
+                            card={card}
+                            {...card}
+                        />
+                    )}
+                </div>)
+                :
+                <div className="cards-container" >
+                    {props.searchedSavedMovies.map(({ ...card }) =>
+                        <Card
+                            handleCardDelete={props.handleCardDelete}
+                            card={card}
+                            savedCards={props.savedCards}
+                            {...card}
+                        />
+                    )}
 
-
-            </div>
+                    {(props.searchedSavedMovies.length === 0) && <p>Ничего не найдено</p>}
+                </div>
+            }
         </>
     );
 }
